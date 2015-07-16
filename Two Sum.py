@@ -4,8 +4,8 @@ class Solution:
     # @return {integer[]}
     def twoSum(self,nums, target):
         temp={}
-        for index in range(len(num)):
-            if target - num[index] in temp:
-                return [temp[target - num[index]]+1,index + 1]
-            temp[num[index]] = index
+        for index in range(len(nums)):
+            if target - nums[index] in temp:
+                return [temp[target - nums[index]]+1,index + 1]
+            temp[nums[index]] = index
 
