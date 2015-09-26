@@ -23,6 +23,5 @@ public:
         if(p->val!=q->val || a!=b)return false;
         if(p->val == q->val && a==0 && b==0)return true;
         return isSameTree(p->left,q->left) && isSameTree(p->right,q->right);
-        
     }
 };
