@@ -1,0 +1,86 @@
+#include<iostream>
+#include<ctime>
+#include<stdlib.h>
+#include<vector>
+using namespace std;
+vector<int>A;
+int T;				//
+int finMax(int i)
+{
+	int max=0;
+	int place=0;
+	for(int j=1;j<=i;j++)
+	{
+		if(A[j]>max)
+		{
+			max = A[j];
+			place = j;
+		}
+	}
+	return place;
+}
+void reverse(int i){
+	for(int j=1;j<=i/2;j++)
+	{
+		int temp = A[j];
+		A[j] = A[i-j+1];
+		A[i-j+1] = temp;
+	}
+}
+void print(int num)
+{
+	for(int i=1;i<=num;i++)
+	{
+		for(int j=0;j<A[i];j++)
+			cout<<'*';
+		cout<<endl;
+	}
+	cout<<endl;
+}
+
+
+int main()
+{
+	int num;
+	cout<<"请输入大饼数目（ctrl+z结束）：";
+	while(cin>>num)
+	{
+		A.clear();
+		A.push_back(0);
+		for(int i =0;i<100;i++)
+			A.push_back( i+1);
+		srand(time(NULL));
+		for(int i=0;i<num*3;i++)
+		{
+			int temp1 = rand()%num+1;
+			int temp2 = rand()%num+1;
+			int temp = A[temp1];
+			A[temp1] = A[temp2];
+			A[temp2] = temp;
+		}
+		cout<<"随机生成的"<<num<<"个大饼顺序为："<<endl;
+		print(num);
+		int step=0;
+		for(int i=num;i>1;i--)
+		{
+
+			int ma = finMax(i);
+			if(ma!=i){
+				if(ma!=1){
+				step++;
+				cout<<"step "<<step<<":从第"<<ma<<"张饼翻"<<endl;
+				reverse(ma);
+				print(num);}
+				step++;
+				reverse(i);
+				cout<<"step "<<step<<":从第"<<i<<"张饼翻"<<endl;
+				print(num);
+			}
+
+		}
+
+		cout<<"翻大饼完成~"<<endl<<"请输入大饼数目（ctrl+z结束）：";
+
+	}
+	return 0;
+}
