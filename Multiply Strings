@@ -1,0 +1,81 @@
+class Solution {
+public:
+bool zeroString(string s)
+{
+	for (string::iterator i = s.begin(); i != s.end(); i++)
+	{
+		if (*i != '0')return false;
+	}
+	return true;
+}
+string add(string s1, string s2){
+	int s1Size = s1.size(), s2Size = s2.size();
+	int length = s1Size > s2Size ? s1Size : s2Size;
+	string res = s1;
+	if (s2Size > s1Size){
+		res = string(s2Size - s1Size + 1, '0') + res;
+	}
+	else{
+		res = "0" + res;
+	}
+	int carry = 0,a,b;
+	for (int i = 0; i < res.size(); i++){
+		a = res[length - i]-'0';
+		b = 0;
+		if (i < s2.size())b = s2[s2Size-1-i]-'0';
+		res[length - i] = (a + b + carry) % 10+'0';
+		carry = (a + b + carry) / 10;
+	}
+	if (carry != 0)res[0] = carry+'0';
+	return res;
+}
+string multi(char c, string s, int zeros)
+{
+	int cheng = c - '0';
+	if (cheng == 0)return "0";
+	string res = string(s.size() + 1, '0');
+	//乘法
+	int carry = 0;  
+	int temp, num;
+	for (int i = s.size() - 1; i >= 0;i--){
+		temp = s[i]-'0';
+		num = temp*cheng+carry;
+		res[i + 1] = num % 10 + '0';
+		carry = num / 10;
+	}
+	if (carry != 0)res[0] = carry+'0';
+	return res + string(zeros, '0');
+	//加上zeros
+}
+//减去前面的0
+string subZero(string s)
+{
+	int place = -1;
+	for (int i = 0; i < s.size(); i++){
+		if (s[i] != '0'){
+			break;
+		}place=i;
+	}
+	if (place != -1){
+		return s.substr(place+1,s.size()-place-1);
+	}
+	return s;
+}
+    string multiply(string num1, string num2) {
+        	if (num1.empty() || num2.empty()){
+		return "";
+	}
+	if (zeroString(num1) || zeroString(num2))return "0";
+	string res = "";
+	if (num1.size() > num2.size()){
+		string temp = num1;
+		num1 = num2;
+		num2 = temp;
+	}
+	int zeros = num1.size()-1;
+	for (int i=0; i <num1.size();i++){
+		res = add(res, multi(num1[i], num2, zeros--));
+	}
+	return subZero(res);
+    }
+};
