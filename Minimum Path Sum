@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void set(vector<int>& grid,int i,int j,int colSize,int num){
+        grid[i*colSize+j]=num;
+    }
+    int at(vector<int>& grid,int i,int j,int colSize){
+        return grid[i*colSize+j];
+    }
+    int minPathSum(vector<vector<int>>& grid) {
+        int colSize = grid[0].size();
+        int rowSize = grid.size();
+        vector<int>dp(grid.size()*grid[0].size());
+        dp[0]=grid[0][0];
+        for(int i=1;i<grid[0].size();i++){
+            set(dp,0,i,0,at(dp,0,i-1,colSize)+grid[0][i]);
+        }
+        for(int i=1;i<grid.size();i++){
+            set(dp,i,0,colSize,at(dp,i-1,0,colSize)+grid[i][0]);
+        }
+        for(int i=1;i<rowSize;i++){
+            for(int j=1;j<colSize;j++){
+                set(dp,i,j,colSize,min(at(dp,i-1,j,colSize),at(dp,i,j-1,colSize))+grid[i][j]);
+            }
+        }
+        return at(dp,rowSize-1,colSize-1,colSize);
+    }
+};
