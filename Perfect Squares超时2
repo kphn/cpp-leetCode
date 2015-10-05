@@ -1,0 +1,42 @@
+class Solution {
+public:
+	bool canSqrt(int i){
+		if (sqrt(i) - (int)(sqrt(i)) < 0.000001)return true;
+		return false;
+	}
+	int numSquares(int n) {
+		set<int>s;
+		if (canSqrt(n))return 1;
+		vector<int>v(n + 3, 0);
+		v[1] = 1;
+		s.insert(1);
+		for (int i = 2; i != n + 1; i++){
+			if (v[i]>0)continue;
+			if (canSqrt(i)){
+				s.insert(i);
+				v[i] = 1;
+				for (set<int>::iterator iter = s.begin(); iter != s.end(); iter++){
+					int t = *iter + i;
+					if (t> n)break;
+					if (!canSqrt(t)){
+						v[t] = 2;
+						if (t == n)return 2;
+					}
+					else v[t] = 1;
+				}
+			}
+			else{
+				int n = 0X00FFFFFF;
+				for (int j = i/2; j > 0; j--){
+					if (n > (v[j] + v[i - j]))
+					{
+						n = v[j] + v[i - j];
+					}
+						
+				}
+				v[i] = n;
+			}
+		}
+		return v[n];
+	}
+};
