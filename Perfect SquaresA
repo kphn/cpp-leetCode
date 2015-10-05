@@ -1,0 +1,24 @@
+class Solution {
+public:
+	bool canSqrt(int i){
+		if (sqrt(i) - (int)(sqrt(i)) < 0.000001)return true;
+		return false;
+	}
+	int numSquares(int n) {
+		vector<int>dp(n+1,0xFFFFFF);
+		dp[1] = 1;
+		if (canSqrt(n))return 1;
+		for (int i = 2; i <= n; i++){
+			if (canSqrt(i)){
+				dp[i] = 1;
+				continue;
+			}
+			int j = 1;
+			while (j*j < i){
+				dp[i] = min(dp[i], dp[i - j*j]+1);
+				j++;
+			}
+		}
+		return dp[n];
+	}
+};
