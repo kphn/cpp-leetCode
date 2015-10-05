@@ -1,0 +1,50 @@
+class Solution {
+public:
+	vector<vector<int>> fourSum(vector<int>& nums, int target) {
+		vector<vector<int>>res;
+		int length = nums.size();
+		if (length < 4)return res;
+		sort(nums.begin(), nums.end());
+		for (int i = 0; i < length - 2; i++)
+		{
+			for (int j = i + 3; j < length; j++){
+				int start = i + 1;
+				int end = j - 1;
+				int TwoSum = nums[i] + nums[j];
+				bool alreadyHave;
+				while (start < end){
+					int FourSum = nums[start] + nums[end] + TwoSum;
+					if (FourSum == target){
+						alreadyHave = false;
+						int a[4] = { nums[i], nums[start], nums[end], nums[j] };
+						vector<int>v(a,a+4);
+						for (int i = 0; i < res.size(); i++){
+							if (v[0] == res[i][0] && v[1] == res[i][1] && v[2] == res[i][2]){ alreadyHave = true; break; }
+						}
+						if (!alreadyHave)
+							res.push_back(v);
+						
+							while (nums[start+1]==nums[start]){
+								start++;
+							}
+							//while (nums[end - 1] == nums[end]){
+							//	end--;
+							//}
+							start++;
+							//end--;
+					}
+					else if (FourSum < target){
+						start++;
+					}
+					else {
+						end--; 
+					}
+
+				}
+				//while (j < length-1 && nums[j] == nums[j + 1]){ j++; }
+			}
+			while (i < length - 3 && nums[i] == nums[i + 1]){ i++; }
+		}
+		return res;
+	}
+};
