@@ -1,0 +1,71 @@
+#include<iostream>
+#include<vector>
+#include<utility>
+#include<algorithm>
+#include<map>
+using namespace std;
+class Solution {
+public:
+	bool doNotHaveTheSame(int i1, int i2, int i3, int i4){
+		if (i1 != i2 && i1 != i3 && i1 != i4 && i2 != i3 && i2 != i4 && i3 != i4)return true;
+		return false;
+	}
+	vector<vector<int>> fourSum(vector<int>& nums, int target) {
+		vector<vector<int>> res;
+		int length = nums.size();
+		if (length<4)return res;
+		multimap<int, pair<int, int>>m;
+		multimap<int, pair<int, int>>::iterator p_map;
+		multimap<int, pair<int, int>>::iterator iter ;
+		vector<multimap<int, pair<int, int>>::iterator>iters;
+		pair<multimap<int, pair<int, int>>::iterator, multimap<int, pair<int, int>>::iterator>ret;
+		pair<multimap<int, pair<int, int>>::iterator, multimap<int, pair<int, int>>::iterator>ret1;
+		std::vector<int> v;
+		for (int i = 0; i<length - 1; i++)
+		for (int j = i + 1; j<length; j++){
+			m.insert(pair<int, pair<int, int>>(nums[i] + nums[j], pair<int, int>(i, j)));
+		}
+
+		while (m.size()>1){
+			bool alwaysHave = false;
+			p_map = m.begin();
+			iter = m.find(target - p_map->first);
+			//ret = m.equal_range(p_map->first);
+			if (iter != m.end()){
+				ret1 = m.equal_range(iter->first);
+				//for (p_map = ret.first; p_map != ret.second; ++p_map)
+				for (iter = ret1.first; iter != ret1.second; ++iter){
+					if (doNotHaveTheSame(p_map->second.first, p_map->second.second, iter->second.first, iter->second.second)){
+						alwaysHave = false;
+						v.clear();
+						v.push_back(nums[p_map->second.first]);
+						v.push_back(nums[p_map->second.second]);
+						v.push_back(nums[iter->second.first]);
+						v.push_back(nums[iter->second.second]);
+						sort(v.begin(), v.end());
+						for (int i = 0; i < res.size();i++){
+							if (v[0] == res[i][0] && v[1] == res[i][1] && v[2] == res[i][2]){ alwaysHave = true; break; }
+						}
+						if (!alwaysHave)res.push_back(v);
+					}
+				}
+			}
+			m.erase(p_map);
+		}
+
+		return res;
+	}
+};
+int main(){
+	Solution s;
+	vector<int>v;
+	int target = 0;
+	//v.push_back(-1);
+	//v.push_back(-2);
+	v.push_back(0);
+	//v.push_back(1);
+	//v.push_back(2);
+	//v.push_back(0);
+	s.fourSum(v, target);
+	return 0;
+}
