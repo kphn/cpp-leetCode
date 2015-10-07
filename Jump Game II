@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int step=0;
+        int length = nums.size()-1;
+        int now=0;
+        while(now<length){
+            step++;
+            int temp=0;
+            int canBe=0;
+			if(now + nums[now] >= length)return step;
+            for(int i=1;i<=nums[now];i++){
+                if(i+nums[now+i]>canBe){
+                    canBe = i+nums[now+i];
+                    temp = now+i;
+                }
+            }
+            now = temp;
+        }
+        return step;
+    }
+};
