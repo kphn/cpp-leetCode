@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool match(char a,char b){
+        if(a=='(' && b==')' || a=='{'&&b=='}' || a=='['&&b==']')return true;
+        return false;
+    }
+    bool isValid(string s) {
+        stack<char>sc;
+        for(int i=0;i<s.size();i++){
+            if(sc.empty())sc.push(s[i]);
+            else{
+                if(match(sc.top(),s[i]))sc.pop();
+                else sc.push(s[i]);
+            }
+        }
+        if(sc.empty())return true;
+        return false;
+    }
+};
