@@ -1,0 +1,38 @@
+class Solution {
+public:
+	int maximalSquare(vector<vector<char>>& matrix) {
+		if(matrix.empty())return 0;
+		int maxRes=0;
+		std::vector<std::vector<int>> dp;
+		std::vector<int> v(matrix[0].size(),0);
+		for(int i=0;i<matrix.size();i++)dp.push_back(v);
+		for(int i=0;i<matrix[0].size();i++){if(matrix[0][i]=='1'){dp[0][i]=1;maxRes=1;}}
+		for(int i=0;i<matrix.size();i++){if(matrix[i][0]=='1'){dp[i][0]=1;maxRes=1;}}
+		for(int i=1;i<matrix.size();i++){
+			for(int j=1;j<matrix[0].size();j++){
+				if(matrix[i][j]=='0')dp[i][j]=0;
+				else{
+					int temp = dp[i-1][j-1];
+					while(temp){
+						bool flag = true;
+						for(int k=1;k<=temp;k++){
+							if(matrix[i-k][j]=='0' || matrix[i][j-k]=='0')flag=false;
+						}
+						if (flag)
+						{
+							dp[i][j]=temp+1;
+							break;
+						}
+						/*else 
+							dp[i][j]=1;*/
+						temp--;
+					}
+					if(dp[i][j]==0)dp[i][j]=1;
+					maxRes = max(maxRes,dp[i][j]);
+				}
+
+			}
+		}
+		return maxRes*maxRes;
+	}
+};
