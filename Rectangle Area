@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        return (D-B)*(C-A)+(G-E)*(H-F)-overLappingArea(A,B,C,D,E,F,G,H);
+    }
+    int overLappingArea(int A, int B, int C, int D, int E, int F, int G, int H){
+        //两个区域相交区域的取值的边缘为上小下大左大右小，（右-左）*（上-下）>0?
+        long long maxLeft=max(A,E),minRight=min(C,G),maxBottom=max(B,F),minTop=min(D,H);
+        if((minRight-maxLeft)<=0 ||(minTop-maxBottom)<=0 )return 0;
+        return (minRight-maxLeft)*(minTop-maxBottom);
+    }
+};
