@@ -1,0 +1,46 @@
+class Solution {
+public:
+    //可以将这个序列看成一个四进制的数字，数值相同则序列必相同(直接用map也可以做)
+    int numCh(char ch){
+        int num=-1;
+        switch(ch){
+            case 'A':
+                num = 0;
+                break;
+            case 'C':
+                num=1;
+                break;
+            case 'G':
+                num=2;
+                break;
+            case'T':
+                num =3;
+                break;
+        }
+        return num;
+    }
+    int numStr(string s){
+        int num=0;
+        for(int i=0;i<s.size();i++)
+        {
+            num*=4;
+            num+=numCh(s[i]);
+        }
+        return num;
+    }
+    vector<string> findRepeatedDnaSequences(string s) {
+        int fn = 262144;
+        vector<string>res;
+        map<int,int>myMap;
+        if(s.size()<=10)return res;
+        int nu = numStr(s.substr(0,10));
+        myMap.insert(pair<int,int>(nu,1));
+        for(int i=1;i<s.size()-9;i++){
+            nu = (nu-numCh(s[i-1])*fn)*4+numCh(s[i+9]);
+            if(myMap.find(nu)!=myMap.end())myMap[nu]++;
+            else myMap.insert(pair<int,int>(nu,1));
+            if(myMap[nu]==2)res.push_back(s.substr(i,10));
+        }
+        return res;
+    }
+};
