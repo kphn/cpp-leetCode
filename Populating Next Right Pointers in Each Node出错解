@@ -1,0 +1,22 @@
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        if(!root)return;
+        stack<TreeLinkNode *>sT;
+        vector<TreeLinkNode *>vT;
+        sT.push(root);
+        while(!sT.empty()){
+            TreeLinkNode * p = sT.top();
+            vT.push_back(p);
+            sT.pop();
+            if(p->left)sT.push(p->left);
+            if(p->right)sT.push(p->right);
+        }
+        for(int i=0;i<vT.size()-1;i++){
+            if((i+2)&(i+1)==0) 
+				vT[i]->next = NULL;
+            else 
+				vT[i]->next = vT[i+1];
+        }
+    }
+};
