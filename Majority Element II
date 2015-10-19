@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool isMajor(vector<int>nums,int n){
+        int k=0;
+        for(int i=0;i<nums.size();i++)
+            if(nums[i] == n)k++;
+        if(k>nums.size()/3)return true;
+        return false;
+    }
+    vector<int> majorityElement(vector<int>& nums) {
+        //使用改进的Moore投票算法
+        int c1=0,t1=0,c2=0,t2=0;
+        for(int i=0;i<nums.size();i++){         
+            if(c1==0){                  
+                if(nums[i]!=t2){        //当前数不是候选数字2且候选数字1为空
+                    c1=1;
+                    t1 = nums[i];
+                }else{                  //当前数字为候选数字2
+                    c2++;
+                }
+                
+            }
+            else if(c2==0){             
+                if(nums[i]!=t1){        //当前数字不是候选数字1且候选数字2为空
+                    c2=1;
+                    t2=nums[i];
+                }                       //当前数字为候选数字1
+                else c1++;
+            }
+            else{                      
+                if(nums[i] == t1){       //候选数字1
+                    c1++;
+                }else if(nums[i] == t2){     //候选数字2
+                    c2++;
+                }else{                       //都不是
+                    c1--;
+                    c2--;
+                }
+            }
+        }
+        vector<int>res;
+        //最后需要再统计一次c1,c2出现次数，满足才能加入
+        if(c1!=0 && isMajor(nums,t1))res.push_back(t1);
+        if(c2!=0 && isMajor(nums,t2))res.push_back(t2);
+        return res;
+    }
+};
