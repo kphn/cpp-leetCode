@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool next(vector<int>&vc,int n){
+        for(int i = vc.size()-1;i>=0;i--){
+        	if(vc[i] < (i+1+n-vc.size()) ){
+        		vc[i]++;
+        		for(int j = i+1;j<vc.size();j++){
+        			vc[j] = vc[i]+j-i;
+        		}
+        		return true;
+        	}
+        }
+        return false;
+    }
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int>start;
+        for(int i=0;i<k;i++)start.push_back(i+1);
+        	res.push_back(start);
+        while(next(start,n)){
+        	res.push_back(start);
+        }
+        return res;
+    }
+};
