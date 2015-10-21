@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int zeroCount=0,oneCount=0,twoCount=0;
+        for(int i=0;i<nums.size();i++){
+            switch(nums[i]){
+                case 0:
+                    zeroCount++;
+                    break;
+                case 1:
+                    oneCount++;
+                    break;
+                case 2:
+                    twoCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        nums.clear();
+        int nums1[3] = {zeroCount,oneCount,twoCount};
+        for(int i=0;i<3;i++){
+            for(int j=0;j<nums1[i];j++)
+                nums.push_back(i);
+        }
+    }
+};
