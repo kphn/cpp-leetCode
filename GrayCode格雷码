@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int>res;
+        res.push_back(0);
+        if(n==0)return res;
+        res.push_back(1);
+        if(n==1)return res;
+        for(int i=2;i<=n;i++){
+            int vecSize = res.size();
+            //vector倒序添加一遍
+            for(int j = vecSize-1;j>=0;j--){
+                res.push_back(res[j]);
+            }
+            //对后半部分前面置1
+            for(int k=1<<(i-1);k<1<<i;k++){
+                res[k]+=1<<(i-1);
+            }
+        }
+        return res;
+    }
+};
