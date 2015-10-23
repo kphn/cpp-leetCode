@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        //int length = nums.size();
+        bitset<32>b;
+        vector<vector<int>> res;
+        vector<int>temp;
+        int i=0;
+        while(i < 1<<nums.size()){
+            temp.clear();
+            for(int i=b.size()-1;i>=0;i--){
+                if(b[i])temp.push_back(nums[i]);
+            }
+            sort(temp.begin(),temp.end());
+            res.push_back(temp);
+            i++;
+            for(int j=0;j<b.size();j++){
+                if(b[j] == 0){
+                    b[j]=1;
+                    for(int k=0;k<j;k++){
+                        b[k]=0;
+                    }
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+};
