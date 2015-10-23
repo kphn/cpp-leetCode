@@ -1,0 +1,41 @@
+class Solution {
+public:
+	void generate(int n,pair<int,int>a,string forNow,std::vector<string>& v){
+		if(a.first == a.second && a.first == n){
+			v.push_back(forNow);
+			return;
+		}
+		if(a.first == a.second){
+			forNow +="(";
+			a.first +=1;
+			generate(n,a,forNow,v);
+		}
+		else if(a.first > a.second){
+			if(a.first < n){
+				string temp = forNow;
+				temp += "(";
+				a.first +=1;
+				generate(n,a,temp,v);
+
+				temp = temp.substr(0,temp.size()-1);
+				a.first-=1;
+				a.second+=1;
+				temp +=")";
+				generate(n,a,temp,v);
+
+			}else{
+				string temp1 = forNow;
+				temp1 += ")";
+				a.second +=1;
+				generate(n,a,temp1,v);
+			}
+		}
+	}
+	vector<string> generateParenthesis(int n) {
+		std::vector<string> res;
+		string start = "(";
+		pair<int,int>a(1,0);
+		generate(n,a,start,res);
+		return res;
+	}
+};
