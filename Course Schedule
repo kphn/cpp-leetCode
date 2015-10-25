@@ -1,0 +1,28 @@
+class Solution {
+public:
+	vector<std::vector<int>>coursesGraph;
+	bool chase(int numCourses,int nowStep,int nowPos){
+		if(nowStep == numCourses)return false;
+		bool flag = true;
+		for(int i=0;i<coursesGraph[nowPos].size();i++){
+			flag &= chase(numCourses,nowStep+1,coursesGraph[nowPos][i]);
+			if(!flag)return false;
+		}
+		return true;
+	}
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        coursesGraph.clear();
+        std::vector<int> v;
+        for(int i=0;i<numCourses;i++)
+        	coursesGraph.push_back(v);
+        for(int i=0;i<prerequisites.size();i++){
+        	coursesGraph[prerequisites[i].first].push_back(prerequisites[i].second);
+        }
+        for(int i=0;i<numCourses;i++){
+        	if(!chase(numCourses,0,i))
+        		return false;
+        }
+        return true;
+
+    }
+};
