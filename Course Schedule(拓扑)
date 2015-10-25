@@ -1,7 +1,7 @@
 class Solution {
 public:
 	vector<std::vector<int>>coursesGraph;
-    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {     //宽度优先or拓扑排序
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {     //拓扑排序
     	queue<int>courseCanTake;
         coursesGraph.clear();
         std::vector<int> v,courseBefore(numCourses,0);				//存储每个课程自己的先决课程的数目
