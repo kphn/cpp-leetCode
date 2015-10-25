@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int length = nums.size();
+        if(length==1 || length==0)return true;
+        int nowReach = 0;
+        while(nowReach < (length-1)){
+            nowReach += nums[nowReach];
+            if(nowReach>=(length-1))return true;
+            if(nums[nowReach]!=0)continue;
+            else{
+                int last = nowReach;
+                for(int i = nowReach;i>=0;i--){
+                    if(i+nums[i] > nowReach){
+                        nowReach = i+nums[i];
+                        break;
+                    }
+                }
+                if(last == nowReach)return false;
+            }
+        }
+        return nowReach>=(length-1);
+    }
+};
