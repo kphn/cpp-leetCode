@@ -1,0 +1,34 @@
+class Solution {
+public:
+	vector<std::vector<int>>coursesGraph;
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {     //宽度优先or拓扑排序
+    	queue<int>courseCanTake;
+        coursesGraph.clear();
+        std::vector<int> v,courseBefore(numCourses,0);				//存储每个课程自己的先决课程的数目
+        for(int i=0;i<numCourses;i++)
+        	coursesGraph.push_back(v);
+        for(int i=0;i<prerequisites.size();i++){
+        	//这里存储的vector是课程i所影响到的课程
+        	coursesGraph[prerequisites[i].second].push_back(prerequisites[i].first);
+        	courseBefore[prerequisites[i].first]++;
+        }
+        for(int i=0;i<numCourses;i++){
+        	if(courseBefore[i] == 0)
+        		courseCanTake.push(i);
+        }
+        if(courseCanTake.empty())return false;
+        int courseTake = courseCanTake.size();
+        while(!courseCanTake.empty()){
+            if(courseTake == numCourses)return true;
+        	int t = courseCanTake.front();
+        	courseCanTake.pop();
+        	for(int i=0;i<coursesGraph[t].size();i++){
+        		if(--courseBefore[coursesGraph[t][i]] == 0){
+        			courseCanTake.push(coursesGraph[t][i]);
+        			if(++courseTake == numCourses)return true;
+        		}
+        	}
+        }
+        return false;
+    }
+};
