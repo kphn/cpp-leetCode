@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        //使用两个map来保存相互之间的对应关系
+        map<char,char>s1,t1;
+        if(s.size()!=t.size())return false;
+        for(int i=0;i<s.size();i++){
+            char a = s[i],b=t[i];
+            if(s1.find(a)!=s1.end()){
+                if(s1[a]!=b)return false;
+            }
+            if(t1.find(b)!=t1.end()){
+                if(t1[b]!=a)return false;
+            }
+            s1.insert(pair<char,char>(a,b));
+            t1.insert(pair<char,char>(b,a));
+        }
+        return true;
+    }
+};
