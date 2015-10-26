@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string generateStr(string s){
+        char start = 'a';
+        string res;
+        map<char,char>myMap;
+        for(int i=0;i<s.size();i++){
+            if(myMap.find(s[i])==myMap.end()){
+                res += "!";
+                res.back() = start;
+                myMap.insert(pair<char,char>(s[i],start++));
+            }else{
+                res += "!";
+                res.back() = myMap[s[i]];
+            }
+        }
+        return res;
+    }
+    bool isIsomorphic(string s, string t) {
+        if(s.size()!=t.size())return false;
+        if(generateStr(s) == generateStr(t))return true;
+        return false;
+    }
+};
