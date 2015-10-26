@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string generateNext(string now){
+        string res;
+        if(now.size()==1)return "1"+now;
+        else{
+            now += "#";
+            int pos = 0;
+            for(int i=1;i<now.size();i++){
+                if(now[i] == now[pos])continue;
+                else{
+                    string temp = "0";
+                    temp[0] = now[pos];
+                    res += (to_string(i-pos) + temp);
+                    pos = i;
+                }
+            }
+        }
+        return res;
+    }
+    string countAndSay(int n) {
+        string begin = "1";
+        if(n==1)return begin;
+        while(--n){
+            begin = generateNext(begin);
+        }
+        return begin;
+    }
+};
