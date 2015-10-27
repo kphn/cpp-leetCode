@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int myAtoi(string str) {
+        const char* strch = str.c_str();
+        if(str.size()==0)
+        {
+            return 0;
+        }
+        int i = 0;
+        while(strch[i] == ' ')
+        {
+            ++i;
+        }
+        int sign = 1;
+        if(strch[i] == '-')
+        {
+            sign = -1;
+            ++i;
+        }
+        else if(strch[i] == '+')
+        {
+            ++i;
+        }
+        long long res = 0;
+        while(strch[i] != '\0')
+        {
+            if(strch[i] >= '0' && strch[i] <= '9')
+            {
+                res = res * 10 + (strch[i] - '0');
+                if(res > INT_MAX)
+                {
+                    return sign == -1 ? INT_MIN : INT_MAX;
+                }
+            }
+            else
+            {
+                break;
+            }
+            ++i;
+        }
+        return sign * res; 
+    }
+};
