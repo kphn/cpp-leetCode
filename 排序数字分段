@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<pair<int,int>> vp;
+        vector<string>res;
+        if(nums.size()==1){
+            res.push_back(to_string(nums[0]));
+            return res;
+        }
+        nums.push_back(0x7FFFFFFF);
+        int start=0;
+        pair<int ,int>temp;
+        for(int i=1;i<nums.size();i++){
+			long long a=nums[i],b=nums[start], tempNum = a-b;
+            if(tempNum == i-start)continue;
+            else if(tempNum > i-start){
+                temp.first = nums[start];
+                temp.second = nums[i-1];
+                vp.push_back(temp);
+                start = i;
+            }
+        }
+		if(nums[nums.size()-2] == 0x7FFFFFFF){
+			temp.first = nums[start];
+			temp.second = 0x7FFFFFFF;
+			vp.push_back(temp);
+		}
+        for(int i=0;i<vp.size();i++){
+            if(vp[i].first == vp[i].second){
+                res.push_back(to_string(vp[i].first));
+            }else{
+                res.push_back(to_string(vp[i].first) + "->" + to_string(vp[i].second));
+            }
+        }
+        return res;
+    }
+};
