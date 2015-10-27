@@ -1,0 +1,40 @@
+class Solution {
+public:
+    void SplitString(const std::string& s, std::vector<std::string>& v, const std::string& c)
+    {
+      std::string::size_type pos1, pos2;
+      pos2 = s.find(c);
+      pos1 = 0;
+      while(std::string::npos != pos2)
+      {
+        v.push_back(s.substr(pos1, pos2-pos1));
+     
+        pos1 = pos2 + c.size();
+        pos2 = s.find(c, pos1);
+      }
+      if(pos1 != s.length())
+        v.push_back(s.substr(pos1));
+    }
+    int compareVersion(string version1, string version2) {
+        string c = ".";
+        std::vector<string> v1,v2;
+        SplitString(version1,v1,c);
+        SplitString(version2,v2,c);
+        int minLen = min(v1.size(),v2.size());
+        for(int i=0;i<minLen;i++){
+            int a = stoi(v1[i]),b=stoi(v2[i]);
+            if(a>b)return 1;
+            if(a<b)return -1;
+            continue;
+        }
+        if(v1.size()>v2.size()){
+            for(int i=minLen;i<v1.size();i++)
+                if(stoi(v1[i])>0)return 1;
+        }
+        if(v1.size()<v2.size()){
+            for(int i=minLen;i<v2.size();i++)
+                if(stoi(v2[i])>0)return -1;
+        }
+        return 0;
+    }
+};
