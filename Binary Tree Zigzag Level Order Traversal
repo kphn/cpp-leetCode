@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reverse(vector<int>&v){
+        for(int i=0;i<v.size()/2;i++){
+            int temp = v[i];
+            v[i] = v[v.size()-1-i];
+            v[v.size()-1-i] = temp;
+        }
+    }
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<TreeNode*>myVec,temp;
+        vector<int>temp1;
+        vector<vector<int>>res;
+        if(root==NULL)return res;
+        myVec.push_back(root);
+        while(!myVec.empty()){
+            temp.clear();
+            temp1.clear();
+            for(int i=0;i<myVec.size();i++){
+                temp1.push_back(myVec[i]->val);
+                if(myVec[i]->left!=NULL)temp.push_back(myVec[i]->left);
+                if(myVec[i]->right!=NULL)temp.push_back(myVec[i]->right);
+            }
+            myVec = temp;
+            res.push_back(temp1);
+        }
+        for(int i=0;i<res.size();i++)
+            if(i&1) reverse(res[i]);
+        return res;
+    }
+};
