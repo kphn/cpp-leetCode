@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int searchBetIJ(vector<int>& nums, int i,int j,int target){
+		if(i>=nums.size())return -1;
+        int l=i,h=j,mid = (l+h)/2;
+        while(l<h){
+            mid = (l+h)/2;
+            if(nums[mid] == target)return mid;
+            if(nums[mid]<target)l=mid+1;
+            else h=mid-1;
+        }
+        if(nums[l] == target)return l;
+        else return -1;
+    }
+    int search(vector<int>& nums, int target) {
+        //先二分搜索搜索出最大值，再二分搜索搜索出值
+        if(nums.size() ==0)return -1;
+        if(nums.size()==1)return nums[0]==target?0:-1;
+        int l=0,h=nums.size()-1,mid,top;
+        while(l+1<h){
+            mid = (l+h)/2;
+            if(nums[mid] > nums[l])l=mid;
+            else h=mid;
+        }
+        top = nums[l]>nums[h]?l:h;
+		int t1 = searchBetIJ(nums,0,top,target);
+        if(t1!=-1)return t1;
+        return searchBetIJ(nums,top+1,nums.size()-1,target);
+    }
+};
