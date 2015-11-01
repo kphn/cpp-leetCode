@@ -1,0 +1,26 @@
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        int A=0,B=0;
+        map<char,int> s;
+        for(int i=0;i<secret.size();i++){
+            if(secret[i] == guess[i])A++;
+            else{
+                if(s.find(secret[i]) == s.end()){
+                    s.insert(pair<char,int>(secret[i],1));
+                }else s[secret[i]]++;
+            }
+        }
+        for(int i=0;i<secret.size();i++){
+            if(secret[i] != guess[i]){
+                if(s.find(guess[i])!=s.end()){
+                    if(s[guess[i]]!=0){
+                        B++;
+                        s[guess[i]]--;
+                    }
+                }
+            }
+        }
+        return to_string(A) + "A" + to_string(B)+"B";
+    }
+};
