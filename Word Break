@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        //使用回溯法超时，试着动态规划
+        std::vector<bool> res(s.size()+1,false);
+        res[0] = true;
+        for(int i=0;i<s.size();i++){
+            if(res[i]){
+                for(int j=i;j<=s.size();j++){
+                    if(wordDict.find(s.substr(i,j-i))!=wordDict.end()){
+                        res[j]=true;
+                    }
+                }
+            }
+        }
+        return res[s.size()];
+        
+    }
+};
