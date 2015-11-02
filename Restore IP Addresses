@@ -1,0 +1,39 @@
+class Solution {
+public:
+    std::vector<string> res;
+    void add(std::vector<string> v){
+        string s = v[0];
+        for(int i=1;i<4;i++){
+            s+=".";
+            s+=v[i];
+        }
+        res.push_back(s);
+    }
+    void travel(vector<string> v,string s){
+        if(s.size() > 3*(4-v.size()) || s.size() < (4-v.size()))return;
+        if(v.size() == 3){
+            if(stoi(s) < 256){
+				if(s.size()>1 && s[0]=='0')return;
+                v.push_back(s);
+                add(v);
+            }else return;
+        }
+        std::vector<string> temp;
+        for(int i=1;i<4 && i<s.size();i++){
+            temp = v;
+			if(stoi(s.substr(0,i)) < 256 ){
+			    if(i>1 && s[0]=='0')
+					break;
+                temp.push_back(s.substr(0,i));
+                travel(temp,s.substr(i,s.size()-i));
+			}
+        }
+    }
+
+    vector<string> restoreIpAddresses(string s) {
+        res.clear();
+        std::vector<string> start;
+        travel(start,s);
+        return res;
+    }
+};
