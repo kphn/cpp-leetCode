@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        map<int,int> myMap;          //存储当前数字最大序列（并不是所有值都存储，只是连续序列的两个边缘数字存储最大长度）
+        for(int i=0;i<nums.size();i++){
+            if(myMap.find(nums[i])!=myMap.end())continue;
+            else{
+                pair<int,int>temp(nums[i],1);
+                if(myMap.find(nums[i]-1)!=myMap.end()){
+                    temp.second += myMap[nums[i]-1];
+                }if(myMap.find(nums[i]+1) != myMap.end()){
+                    temp.second += myMap[nums[i]+1];
+                }
+                myMap.insert(temp);
+                if(myMap.find(nums[i]-1)!=myMap.end()){
+                    myMap[nums[i] - myMap[nums[i]-1]] = temp.second;
+                }if(myMap.find(nums[i]+1) != myMap.end()){
+                    myMap[nums[i] + myMap[nums[i]+1]] = temp.second;
+                }
+            }
+        }
+        int longest = 0;
+        for(int i = 0;i<nums.size();i++){
+            longest = max(longest,myMap[nums[i]]);
+        }
+        return longest;
+    }
+};
