@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        //gas-cost的数组中求得最大子数组,起始坐标为最小子数组的后面的标号
+        int length = gas.size();
+        std::vector<int> v(length,0);
+        int allCost=0,allGas=0;
+        for(int i =0;i<gas.size();i++){
+            allGas += gas[i];
+            allCost += cost[i];
+            v[i] = gas[i] - cost[i];
+        }
+        if(allCost > allGas)return -1;
+        std::vector<int> v2 = v;
+        v.insert(v.end(),v2.begin(),v2.end());
+        
+        int start=0,nowStart=0,end = length,sum=0,nowSum=0;
+        for(int i=0;i<end;i++){
+            if(nowSum <= 0){
+                nowSum = v[i];
+                nowStart = i;
+				end = nowStart + length;
+            }else{
+                nowSum += v[i];
+            }
+			if(nowSum > sum){
+                    start = nowStart;
+                    sum = nowSum;
+                    end = start + length;
+             }
+        }
+        int leftGas = 0;
+        for(int i = start;i<start + length;i++){
+            leftGas +=v[i%length];
+            if(leftGas<0)break;
+        }
+        return leftGas<0?-1:start;
+
+    }
+};
