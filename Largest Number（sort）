@@ -1,0 +1,21 @@
+class Solution {
+public:
+    static bool larger(string &a,string &b){
+		//傻了，直接将a+b与b+a进行比较即可！！！
+		return a+b>b+a;
+    }
+    string largestNumber(vector<int>& nums) {
+        //冒泡排序
+        vector<string>vec;
+        for(int i=0;i<nums.size();i++){
+            vec.push_back(to_string(nums[i]));
+        }
+        sort(vec.begin(),vec.end(),larger);
+        if(vec[0] == "0")return "0";
+        string res;
+        for(string s:vec){
+            res+=s;
+        }
+        return res;
+    }
+};
