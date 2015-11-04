@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool larger(int a,int b){
+		//傻了，直接将a+b与b+a进行比较即可！！！
+		string astr= to_string(a)+to_string(b),bstr=to_string(b)+to_string(a);
+		for(int i=0;i<astr.size();i++){
+			if(astr[i]!=bstr[i])return astr[i]>bstr[i];
+		}
+		return false;
+    }
+    string largestNumber(vector<int>& nums) {
+        //冒泡排序
+        string res;
+        for(int i=0;i<nums.size()-1;i++){
+            for(int j=i+1;j<nums.size();j++){
+                if(larger(nums[j],nums[i])){
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j]=temp;
+                }
+            }
+        }
+        int i=0;
+        for(i=0;i<nums.size();i++){
+            if(nums[i]!=0)break;
+        }
+        if(i==nums.size())return "0";
+        for(;i<nums.size();i++){
+            res += to_string(nums[i]);
+        }
+        return res;
+    }
+};
