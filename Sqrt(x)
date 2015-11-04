@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int mySqrt(int x) {
+        int low=0,high =min(x,1<<29);
+        long long temp,mid;
+        while(low<=high){
+            mid = (low+high)>>1;
+            temp = mid*mid;
+            if(temp== x)return mid;
+            else if(temp>x)high = mid-1;
+            else low = mid+1;
+        }
+        if(high*high < x)return high;
+        return high-1;
+    }
+};
