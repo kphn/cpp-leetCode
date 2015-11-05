@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool conflict(std::vector<int> places,int row){
+        //前row行是否有冲突
+        if(row == 0)return false;
+        for(int i=0;i<row;i++){
+            if(places[i] == places[row] || abs(row-i)==abs(places[i]-places[row]))return true;
+        }
+        return false;
+    }
+
+    void setQueens(int row,int n,std::vector<int>places,vector<vector<string>>&res){
+        if (row == n)
+        {
+            std::vector<string> v;
+            for (int i = 0; i < row; ++i)
+            {
+                string str(n,'.');
+                str[places[i]]='Q';
+                v.push_back(str);
+            }
+            res.push_back(v);
+            return;
+        }
+        for (int i = 0; i < n; ++i)
+        {
+            places[row] = i;
+            if(!conflict(places,row))
+                setQueens(row+1,n,places,res);
+        }
+    }
+
+
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>>res;
+        std::vector<int> places(n,0);
+        setQueens(0,n,places,res);
+        return res;
+    }
+};
