@@ -1,0 +1,85 @@
+class Solution {
+public:
+	bool conflict(std::vector<int> places,int row){
+		//前row行是否有冲突
+		if(row == 0)return false;
+		for(int i=0;i<row;i++){
+			if(places[i] == places[row] || abs(row-i)==abs(places[i]-places[row]))
+				return true;
+		}
+		return false;
+	}
+	vector<string> resToString(vector<int>v){
+		vector<string>res;
+		int length = v.size();
+		for(int i=0;i<length;i++){
+			string temp(length,'.');
+			temp[v[i]]='Q';
+			res.push_back(temp);
+		}
+		return res;
+	}
+	vector<vector<string>> solveNQueens(int n) 
+	{
+		//vector<vector<int>>res ;
+		vector<vector<string>>resstr;
+		if(n==1){
+		    string s="Q";
+		    vector<string>tem;
+		    tem.push_back(s);
+		    resstr.push_back(tem);
+		}
+		if(n<4)return resstr;
+		std::vector<int> places(n,0);
+		bool finished = false;
+		while(!finished)
+		{
+			for(int i=0;i<places.size();)
+			{
+				if(!conflict(places,i))
+				{            //没有冲突进行下一行的尝试
+					if (i==n-1)                     //如果已经试完
+					{
+						resstr.push_back(resToString(places));
+						for(int k=n-2;k>=0;k--){
+							if(places[k]<n-1){
+								places[k]++;
+								i=k;
+								for(int j=k+1;j<n;j++){
+									places[j]=0;
+								}
+								break;
+							}
+						}
+					}else 
+						i++;
+				}            
+				else{
+					if(places[i]<n-1)
+						places[i]++;       //第i行有冲突往下个格子走
+					else
+					{                               //第i行有冲突且进行到末端可以进行回溯了
+						for(int k=i-1;k>=0;k--)
+						{
+							if(k==0 && places[0] == n-1)
+								finished=true;
+							if(places[k] == n-1)
+								continue;
+							else
+							{
+								places[k]++;
+								i=k;
+								for(int j=k+1;j<n;j++)
+									places[j]=0;
+								break;
+							}
+						}
+						if(finished)
+							break;
+					}
+				}
+			}
+		}
+		return resstr;
+	}
+};
