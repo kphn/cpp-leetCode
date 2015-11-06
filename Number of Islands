@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void bfs(int i,int j,vector<vector<char>>& grid)
+    {
+        int mx[] = {-1,0,0,1},my[] = {0,1,-1,0};
+        if(grid[i][j] == '0')return;
+        else
+        {
+            grid[i][j]='0';
+            for(int a=0;a<4;a++){
+                int ax = i+mx[a],ay=j+my[a];
+                if(ax>=0 && ax<grid.size() && ay>=0 && ay<grid[0].size()){
+                    bfs(ax,ay,grid);
+                }
+            }
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) 
+    {
+        int lands=0;
+        for(int i=0;i<grid.size();i++)
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]=='1'){
+                    lands++;
+                    bfs(i,j,grid);
+                }
+            }
+        return lands;
+    }
+};
