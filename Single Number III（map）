@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        map<int,int>myMap;
+        vector<int>res;
+        for(int i=0;i<nums.size();i++){
+            if(myMap.find(nums[i]) == myMap.end()){
+                myMap.insert(pair<int,int>(nums[i],1));
+            }else{
+                myMap[nums[i]]++;
+            }
+        }
+        for(map<int,int>::iterator iter=myMap.begin();iter!=myMap.end();iter++){
+            if((*iter).second == 1)res.push_back((*iter).first);
+        }
+        return res;
+    }
+};
