@@ -1,0 +1,77 @@
+class TrieNode {
+public:
+    char ch;
+    bool isWord;
+    map<char,TrieNode*> child;
+    // Initialize your data structure here.
+    TrieNode() {
+        isWord = false;
+        child.clear();
+    }
+    TrieNode(char c){
+        isWord = false;
+        ch = c;
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string word) {
+        TrieNode*start = root;
+        for(char ch:word){
+            if(start->child.find(ch)==start->child.end()){
+				start->child[ch] = new TrieNode(ch);
+            }
+            start = start->child[ch];
+        }
+        start->isWord = true;
+    }
+
+    // Returns if the word is in the trie.从root处开始査起
+    bool search(string word,TrieNode*root) {
+        TrieNode* start = root;
+        bool res  = false;
+        for (int i = 0; i < word.size(); ++i)
+        {
+            if (word[i]=='.')
+            {
+                for(map<char,TrieNode*>::iterator iter = start->child.begin();iter!=start->child.end();iter++){
+                    res|=search(word.substr(i+1,word.size()),(*iter).second);
+                    if(res)return true;
+                }
+                return false;
+            }else{
+                if (start->child.find(word[i]) == start->child.end())return false;
+                start = start->child[word[i]];
+            }
+
+        }
+        return start->isWord;
+    }
+
+
+
+};
+class WordDictionary {
+public:
+
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        myTrie.insert(word);
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    bool search(string word) {
+		return myTrie.search(word,myTrie.root);
+    }
+private:
+    Trie myTrie;
+    
+};
