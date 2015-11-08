@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> compute(vector<int> v1,vector<int> v2,char op){
+        std::vector<int> res;
+        for (int i = 0; i < v1.size(); ++i)
+        {
+            for (int j = 0; j < v2.size(); ++j)
+            {
+                switch(op){
+                    case '+':
+                        res.push_back(v1[i]+v2[j]);
+                        break;
+                    case '-':
+                        res.push_back(v1[i]-v2[j]);
+                        break;
+                    case '*':
+                        res.push_back(v1[i]*v2[j]);
+                        break;
+                }
+            }
+        }
+		return res;
+    }
+    vector<int> diffWaysToCompute(string input) {
+        std::vector<int> res;
+        for (int i = 0; i < input.size(); ++i)
+        {
+            if(input[i] == '+' || input[i]=='-' || input[i]=='*'){
+				vector<int>temp = compute(diffWaysToCompute(input.substr(0,i)),diffWaysToCompute(input.substr(i+1,input.size())),input[i]);
+                for (int j = 0; j < temp.size(); ++j)
+                {
+                    res.push_back(temp[j]);
+                }
+            }
+        }
+        if (res.empty())
+        {
+            res.push_back(stoi(input));
+        }
+		sort(res.begin(),res.end());
+        return res;
+    }
+};
