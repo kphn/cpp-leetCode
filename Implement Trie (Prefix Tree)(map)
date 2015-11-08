@@ -1,0 +1,58 @@
+class TrieNode {
+public:
+    char ch;
+    bool isWord;
+    map<char,TrieNode*> child;
+    // Initialize your data structure here.
+    TrieNode() {
+        isWord = false;
+        child.clear();
+    }
+    TrieNode(char c){
+        isWord = false;
+        ch = c;
+    }
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string word) {
+        TrieNode*start = root;
+        for(char ch:word){
+            if(start->child.find(ch)==start->child.end()){
+				start->child[ch] = new TrieNode(ch);
+            }
+            start = start->child[ch];
+        }
+        start->isWord = true;
+    }
+
+    // Returns if the word is in the trie.
+    bool search(string word) {
+        TrieNode* start = root;
+        for(char ch:word){
+            if(start->child.find(ch) == start->child.end())return false;
+            start = start->child[ch];
+        }
+        return start->isWord;
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    bool startsWith(string prefix) {
+        TrieNode*start = root;
+        for(char ch:prefix){
+            if(start->child.find(ch)==start->child.end())return false;
+            start = start->child[ch];
+        }
+        return true;
+    }
+
+private:
+    TrieNode* root;
+};
