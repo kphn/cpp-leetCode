@@ -1,0 +1,92 @@
+class Solution {
+public:
+	int calculate(string s) 
+	{
+		s = "("+s;
+		s+=")";
+		std::vector<string>myVec;
+		stack<string>myStack;
+		stack<int>res;
+		int start=0,num=0;
+		bool isNum=false;
+		for (int i = 0; i < s.size(); ++i)
+		{
+			if(isdigit(s[i])){
+				isNum = true;
+				num = num*10+s[i]-'0';
+			}
+			else
+			{
+				if(isNum){
+					myVec.push_back(to_string(num));
+					isNum = false;
+					num=0;
+				}
+				if(s[i] == ' '){
+					//start = i+1;
+					continue;
+				}
+				if (s[i] == '+' || s[i]=='-' || s[i]=='(' || s[i] == ')')
+				{
+					//if(i>start)
+					//	myVec.push_back(s.substr(start,i-start));
+					myVec.push_back(string(1,s[i]));
+					//start = i+1;
+				}
+			}
+		}
+		if (s.back()!=')')
+		{
+			myVec.push_back(s.substr(start,s.size()));
+		}
+		for (int i = 0; i < myVec.size(); ++i)
+		{
+			if (myVec[i]=="(" || myVec[i]=="+" ||myVec[i]=="-")
+			{
+				myStack.push(myVec[i]);
+			}else if (myVec[i]==")")
+			{
+
+				while(myStack.top()!="("){
+					int t=res.top();
+					res.pop();
+					if (myStack.top()=="+")
+					{
+						res.top()+=t;
+					}else{
+						res.top()-=t;
+					}
+					myStack.pop();
+				}
+				myStack.pop();
+				if(!myStack.empty())
+					while( myStack.top() == "+" || myStack.top()=="-"){
+						int t = res.top();
+						res.pop();
+						if(myStack.top()=="+"){
+							res.top() += t;
+						}else{
+							res.top()-=t;
+						}
+						myStack.pop();
+					}
+
+			}else{
+				if (myStack.empty() || myStack.top() == "(" )
+				{
+					res.push(stoi(myVec[i]));
+				}else{
+					int t = stoi(myVec[i]);
+					if (myStack.top() == "+")
+					{
+						res.top()+=t;
+					}else{
+						res.top()-=t;
+					}
+					myStack.pop();
+				}
+			}
+		}
+		return res.top();
+	}
+};
