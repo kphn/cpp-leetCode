@@ -1,0 +1,63 @@
+class Solution {
+public:
+	std::vector<char> charList;
+	bool findI(vector<string>v,string s){
+		for(int i=0;i<v.size();i++){
+			if (v[i] == s)return true;
+		}
+		return false;
+	}
+	void bfs(string now,string endWord,vector<string>v,unordered_set<string> &wordList,vector<vector<string>>&res,int &minStep){
+		if (now == endWord)
+		{
+			if (v.size()<minStep)
+			{
+				minStep = v.size();
+			}
+			std::vector<string> temp;
+			res.push_back(v);
+			return;
+		}
+		if (v.size()>=minStep)
+		{
+			return;
+		}
+		for (int i = 0; i < now.size(); ++i)
+		{
+			for (int j = 0; j < 26; ++j)
+			{
+				if(charList[j] == now[i])continue;
+                string t = now;
+                t[i] = charList[j];
+                if (wordList.find(t)!=wordList.end())
+                    {
+						if (!findI(v,t))
+                        {
+							v.push_back(t);
+                        	bfs(t,endWord,v,wordList,res,minStep);
+							v.pop_back();
+                        }
+                    }
+			}
+		}
+
+
+	}
+    vector<vector<string>> findLadders(string beginWord, string endWord, unordered_set<string> &wordList) {
+        vector<vector<string>> res,res1;
+		std::vector<string> v;
+		v.push_back(beginWord);
+        wordList.insert(endWord);
+		int minStep = wordList.size()+1;
+        for (int i = 0; i < 26; ++i)
+        {
+			charList.push_back('a'+i);
+        }
+		bfs(beginWord,endWord,v,wordList,res,minStep);
+		for(int i=0;i<res.size();i++){
+			if(res[i].size()==minStep)
+				res1.push_back(res[i]);
+		}
+        return res1;
+    }
+};
