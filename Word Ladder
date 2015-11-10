@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
+		wordList.insert(endWord);
+        std::map<string, int> myMap;
+        myMap[beginWord]=1;
+        int wordLength = beginWord.size();
+        std::vector<char> charList(26,'a');
+        for (int i = 0; i < charList.size(); ++i)
+        {
+            charList[i]+=i;
+        }
+        queue<string>que;
+        que.push(beginWord);
+        while(!que.empty()){
+            string now = que.front();
+            que.pop();
+            for (int i = 0; i < wordLength; ++i)
+            {
+                for (int j = 0; j < charList.size(); ++j)
+                    {
+                        if(charList[j] == now[i])continue;
+                        string t = now;
+                        t[i] = charList[j];
+                        if (wordList.find(t)!=wordList.end())
+                        {
+                            if (t==endWord)
+                            {
+                                return myMap[now]+1;
+                            }
+                            if (myMap.find(t) == myMap.end())
+                            {
+                                myMap[t] = myMap[now]+1;
+                                que.push(t);
+                            }
+                        }
+                    }       
+            }
+            
+        }
+		return 0;
+
+    }
+};
