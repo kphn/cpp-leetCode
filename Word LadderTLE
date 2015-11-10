@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int editDistance(string a,string b){
+        int distance = 0;
+        for (int i = 0; i < a.size(); ++i)
+        {
+            if (a[i]!=b[i])
+            {
+                distance++;
+            }
+        }
+        return distance;
+    }
+    int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
+        //图的广度优先遍历
+        std::vector<string> v;
+        v.push_back(beginWord);
+        int start = 0;
+        for (unordered_set<string>::iterator iter = wordList.begin();iter!=wordList.end();iter++)
+        {
+			start++;
+            v.push_back(*iter);
+        }
+		start++;
+        v.push_back(endWord);
+        vector<vector<int>>graph(start+1,vector<int>(0));
+        for (int i = 0; i < v.size()-1; ++i)
+        {
+            for (int j = 0; j < v.size(); ++j)
+            {
+                if (editDistance(v[i],v[j]) == 1)
+                {
+                    graph[i].push_back(j);
+                    graph[j].push_back(i);
+                }
+            }
+        }
+
+        std::vector<bool> visited(v.size(),false);
+        std::vector<int> now;
+        visited[0]=true;
+        now.push_back(0);
+        int step = 1;
+        while(!now.empty()){
+            std::vector<int> temp;
+            step++;
+            for (int i = 0; i < now.size(); ++i)
+            {
+                for (int j = 0; j < graph[now[i]].size(); ++j)
+                {
+                    if (graph[now[i]][j] == v.size()-1)
+                    {
+                        return step;
+                    }
+                    if (!visited[graph[now[i]][j]])
+                    {
+                        temp.push_back(graph[now[i]][j]);
+                        visited[graph[now[i]][j]] = true;
+                    }
+                }
+            }
+            now = temp;
+        }
+        return 0;
+
+    }
+};
