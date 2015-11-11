@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+	int findRoot(std::vector<int> inorder,int n){
+		//n为postorder的最后一个值
+		for (int i = 0; i < inorder.size(); ++i)
+		{
+			if (inorder[i]==n)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	TreeNode* buildTreeHelper(vector<int>& inorder, vector<int>& postorder,int is,int ie,int ps,int pe){
+		if(inorder.empty() || ie<is)return NULL;
+		TreeNode*root = new TreeNode(postorder[pe]);
+		int n = findRoot(inorder,postorder[pe]);
+		root->left = buildTreeHelper(inorder,postorder,is,n-1,ps,ps+n-1-is);
+		root->right = buildTreeHelper(inorder,postorder,n+1,ie,ps+n-is,pe-1);
+		return root;
+	}
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        return buildTreeHelper(inorder,postorder,0,inorder.size()-1,0,postorder.size()-1);
+    }
+
+};
