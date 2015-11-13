@@ -1,0 +1,32 @@
+class Solution {
+public:
+	void dfs(int target,int nowat, vector<int> v,vector<int>& candidates,set<vector<int>> &res){
+		for (int i = nowat; i < candidates.size(); ++i)
+		{
+			if (candidates[i]<target)
+			{
+				v.push_back(candidates[i]);
+				dfs(target - candidates[i],i+1,v,candidates,res);
+				v.pop_back();
+			}
+			else if (target == candidates[i])
+			{
+				v.push_back(target);
+				res.insert(v);
+				return;
+			}else return;
+		}
+	}
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        set<vector<int>>temp;
+        vector<vector<int>> res;
+        std::vector<int> v;
+        dfs(target,0,v,candidates,temp);
+        for (auto iter = temp.begin();iter!=temp.end();iter++)
+        {
+        	res.push_back(*iter);
+        }
+        return res;
+    }
+};
