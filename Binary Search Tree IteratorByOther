@@ -1,0 +1,40 @@
+class BSTIterator {
+public:
+    vector<TreeNode*> stack;
+
+
+    TreeNode *goSmallest(TreeNode *n) {
+        if(!n) return 0;
+
+        stack.push_back(n);
+        if (n->left) return goSmallest(n->left);
+        else return n;
+    }
+
+    BSTIterator(TreeNode *root) {
+        goSmallest(root);
+    }
+
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !stack.empty();
+    }
+
+    /** @return the next smallest number */
+    int next() {
+        int ret=stack.back()->val;
+
+        if (stack.back()->right)
+            goSmallest(stack.back()->right);
+        else
+            while (1) {
+                TreeNode *cur = stack.back();
+                stack.pop_back();
+                if (stack.empty())
+                    break;
+                else if (stack.back()->left==cur)
+                    break;
+            }
+        return ret;
+    }
+};
