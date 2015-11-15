@@ -1,0 +1,140 @@
+class TrieNode {
+public:
+    char ch;
+    bool isWord;
+    map<char,TrieNode*> child;
+    // Initialize your data structure here.
+    TrieNode() {
+        isWord = false;
+        child.clear();
+    }
+    TrieNode(char c){
+        isWord = false;
+        ch = c;
+    }
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string word) {
+        TrieNode*start = root;
+        for(char ch:word){
+            if(start->child.find(ch)==start->child.end()){
+                start->child[ch] = new TrieNode(ch);
+            }
+            start = start->child[ch];
+        }
+        start->isWord = true;
+    }
+
+    // Returns if the word is in the trie.
+    bool search(string word) {
+        TrieNode* start = root;
+        for(char ch:word){
+            if(start->child.find(ch) == start->child.end())return false;
+            start = start->child[ch];
+        }
+        return start->isWord;
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    bool startsWith(string prefix) {
+        TrieNode*start = root;
+        for(char ch:prefix){
+            if(start->child.find(ch)==start->child.end())return false;
+            start = start->child[ch];
+        }
+        return true;
+    }
+
+private:
+    TrieNode* root;
+};
+class Solution {
+private:
+    Trie wordTrie,notExistTrie;
+public:
+    bool dfs(vector<vector<char>>& board, string &word,int i,int j,int pos){
+        if(pos == word.size())return true;
+        if(i<0 || i>=board.size() || j<0 || j>=board[0].size() || board[i][j]!=word[pos])return false;
+        int xTo[] = {0,1,0,-1},yTo[] = {1,0,-1,0};
+        int x,y;
+        char c = board[i][j];
+        board[i][j] = '#';
+        for (int k = 0; k < 4; ++k)
+        {
+            x = i+xTo[k];
+            y = j+yTo[k];
+            if (dfs(board,word,x,y,pos+1))
+            {
+                board[i][j] = c;
+                return true;
+            }
+
+        }
+        board[i][j] = c;
+        return false;
+
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        if (board.empty())
+        {
+            return false;
+        }
+        vector<vector<bool>> letterUsed(board.size(),vector<bool>(board[0].size(),false));
+        for (int i = 0; i < board.size(); ++i)
+        {
+            for (int j = 0; j < board[0].size(); ++j)
+            {
+                if (board[i][j] == word[0])
+                {
+                    if (dfs(board,word,i,j,0))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        std::vector<string> res;
+        for (int i = 0; i < words.size(); ++i)
+        {
+            bool hasFound = false;
+            if (wordTrie.startsWith(words[i]))
+            {
+                res.push_back(words[i]);
+                hasFound = true;
+            }else {
+                for (int j = words[i].size(); j > 0; --j)
+                {
+                    if (notExistTrie.search(words[i].substr(0,j)))
+                    {
+                        hasFound = true;
+                        break;
+                    }
+                }
+            }
+            if (!hasFound)
+            {
+                if (exist(board,words[i]))
+                {
+                    wordTrie.insert(words[i]);
+                    res.push_back(words[i]);
+                }else{
+                    notExistTrie.insert(words[i]);
+                }
+            }
+        }
+
+        sort(res.begin(),res.end());
+        return res;        
+    }
+};
