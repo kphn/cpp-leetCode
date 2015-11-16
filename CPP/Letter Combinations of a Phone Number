@@ -1,0 +1,32 @@
+class Solution {
+public:
+	std::vector<string> combina(std::vector<string> vs,string s){
+		std::vector<string> res;
+		if (vs.empty())
+		{
+			for (int i = 0; i < s.size(); ++i)
+			{
+				res.push_back(s.substr(i,1));
+			}
+			return res;
+		}
+		for (int i = 0; i < vs.size(); ++i)
+		{
+			for(int j=0;j<s.size();j++){
+				string t = vs[i];
+				t.push_back(s[j]);
+				res.push_back(t);
+			}
+		}
+		return res;
+	}
+    vector<string> letterCombinations(string digits) {
+        std::vector<string> map{"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        std::vector<string> res;
+        for (int i = 0; i < digits.size(); ++i)
+        {
+        	res = combina(res,map[digits[i] - '2']);
+        }
+        return res;
+    }
+};
