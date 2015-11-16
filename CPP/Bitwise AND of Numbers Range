@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+    	int sub = n-m,t=0;
+        int res = 0;
+        while(sub>0){
+        	t++;
+        	sub>>=1;
+        }
+        m>>=t;
+        n>>=t;
+        while(m>0 && n>0){
+        	if (m&n&1)
+        	{
+        		res^=1<<t;
+        	}
+        	m>>=1;
+        	n>>=1;
+        	t++;
+        }
+        return res;
+    }
+};
