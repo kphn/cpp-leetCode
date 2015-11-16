@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        //分别使用分治法与堆来解决，分治法采用与快排算法相同的策略
+        //堆
+        nums.insert(nums.begin(),0);
+        build_heap(nums);
+        for (int i = 1; i < k; ++i)
+        {
+        	exchange(nums,1,nums.size()-1);
+        	nums.pop_back();
+        	heapfy(nums,1);
+        }
+        return nums[1];
+        
+    }
+    void build_heap(std::vector<int>&nums){
+    	for (int i = (nums.size()-1)/2; i >=1; --i)
+    	{
+    		heapfy(nums,i);
+    	}
+    }
+    void heapfy(std::vector<int>&nums , int i){
+    	//假设i节点的左右子树都满足最大堆
+    	int l = left(i),r = right(i),largest;
+    	if (l<nums.size() && nums[l]>nums[i])
+    	{
+    		largest = l;
+    	}else largest = i;
+    	if (r<nums.size() && nums[r]>nums[largest])
+    	{
+    		largest = r;
+    	}
+    	if (largest!=i)
+    	{
+    		exchange(nums,largest,i);
+    		heapfy(nums,largest);
+    	}
+    }
+    inline void exchange(std::vector<int>& nums,int i,int j){
+    	int temp = nums[i];
+    	nums[i] = nums[j];
+    	nums[j] = temp;
+    }
+
+    inline int parent(int i){
+    	return i/2;
+    }
+    inline int left(int i){
+    	return 2*i;
+    }
+    inline int right(int i){
+    	return 2*i+1;
+    }
+};
