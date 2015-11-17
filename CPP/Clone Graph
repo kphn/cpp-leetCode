@@ -1,0 +1,31 @@
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+class Solution {
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if (!node)
+        {
+			return NULL;
+        }
+        std::map<UndirectedGraphNode*, UndirectedGraphNode*> myMap;
+        cloneGraphHelper(node,myMap);
+        return myMap[node];
+    }
+    void cloneGraphHelper(UndirectedGraphNode*node,map<UndirectedGraphNode*,UndirectedGraphNode*>&myMap){
+    	if (myMap.find(node) == myMap.end())
+    	{
+    		myMap.insert(pair<UndirectedGraphNode*,UndirectedGraphNode*>(node,new UndirectedGraphNode(node->label)));
+    		for (auto i:node->neighbors)
+    		{
+    			cloneGraphHelper(i,myMap);
+    			myMap[node]->neighbors.push_back(myMap[i]);
+    		}
+    	}
+    }
+};
