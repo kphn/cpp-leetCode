@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        queue<int>t2,t3,f5;
+        t2.push(1);
+        t3.push(1);
+        f5.push(1);
+        int min3;
+        for (int i = 0; i < n; ++i)
+        {
+        	int a = t2.front(),b = t3.front(),c=f5.front();
+        	min3 = min(min(a,b),c);
+        	if (min3 == a)
+        	{
+        		t2.pop();
+        	}
+        	if (min3 == b)
+        	{
+        		t3.pop();
+        	}
+        	if (min3 == c)
+        	{
+        		f5.pop();
+        	}
+        	t2.push(min3*2);
+        	t3.push(min3*3);
+        	f5.push(min3*5);
+
+        }
+        return min3;
+    }
+};
