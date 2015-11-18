@@ -1,0 +1,97 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        queue<TreeNode*>q;
+        string res;
+        if (!root)
+        {
+            return "N";
+        }else{
+            q.push(root);
+            while(!q.empty()){
+                TreeNode*t = q.front();
+                q.pop();
+                if (!t)
+                {
+                    res += "N,";
+                }else{
+                    res+=to_string(t->val)+",";
+                    q.push(t->left);
+                    q.push(t->right);
+                }
+            }
+        }
+		while(!res.empty() && res.substr(res.size()-2,2)=="N,"){
+			res = res.substr(0,res.size()-2);
+		}
+        return res;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        queue<TreeNode*>q;
+		TreeNode*root=new TreeNode(0);
+        int start=0;
+        std::vector<string> v;
+        for (int i = 0; i < data.size(); ++i)
+        {
+            if (data[i] == ',')
+            {
+                v.push_back(data.substr(start,i-start));
+                start = i+1;
+            }
+        }
+        if (v.empty())
+        {
+            return NULL;
+        }
+        root->val = stoi(v[0]);
+        q.push(root);
+        start=1;
+        while(!q.empty() && start<v.size()){
+            TreeNode*t = q.front();
+            q.pop();
+            if (!t)
+            {
+                continue;
+            }
+            if (start<v.size())
+            {
+                if (v[start] == "N")
+                {
+                    t->left = NULL;
+                }else
+                    t->left = new TreeNode(stoi(v[start]));
+				q.push(t->left);
+				start++;
+            }
+            if (start<v.size())
+            {
+                if (v[start] == "N")
+                {
+                    t->right = NULL;
+                }else
+                    t->right = new TreeNode(stoi(v[start]));
+				q.push(t->right);
+				start++;
+            }
+        }
+        return root;
+    }
+
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
