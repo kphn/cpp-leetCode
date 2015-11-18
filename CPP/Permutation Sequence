@@ -1,0 +1,28 @@
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        string str = string("123456789").substr(0, n);
+        string res(n, ' ');
+        for(int i = 0; i < n; i++)
+            res[i] = helper(str, k);
+        return res;
+    }
+    //以s中字符构造的全排列中，返回第k个排列的第一个字符，并且删除s中该字符
+    //s中字符递增有序
+    char helper(string &s, int &k)
+    {
+        int tmp = factorial(s.size()-1), i = (k-1)/tmp;
+        char res = s[i];
+        s.erase(i, 1);
+        k -= i*tmp;//更新k
+        return res;
+    }
+    //求正整数n的阶乘
+    int factorial(int n)
+    {
+        int res = 1;
+        for(int i = 2; i <= n; i++)
+            res *= i;
+        return res;
+    }
+};
