@@ -1,0 +1,42 @@
+class Solution {
+public:
+	int maxProduct(vector<int>& nums) {
+		if (nums.empty())
+		{
+			return 0;
+		}
+		int maxPos=nums[0],nowMax=nums[0]>0?nums[0]:0,nowMin=nums[0]<0?nums[0]:0;
+		for (int i = 1; i < nums.size(); ++i)
+		{
+			if (nowMin==0 && nowMax==0)
+			{
+				if (nums[i]>0)
+				{
+					nowMax = nums[i];
+					maxPos = max(nowMax,maxPos);
+				}else if (nums[i]<0)
+				{
+					nowMin = nums[i];
+				}
+				continue;
+			}
+			if (nums[i]>0)
+			{
+				nowMax = max(nowMax*nums[i],nums[i]);
+				nowMin = nums[i]*nowMin;
+				maxPos = max(maxPos,nowMax);
+			}else if(nums[i]<0){
+				int t = nowMax;
+				nowMax = nowMin*nums[i];
+				nowMin = min(t*nums[i],nums[i]);
+				maxPos = max(nowMax,maxPos);
+			}else{
+				nowMax=0;
+				maxPos = max(nowMax,maxPos);
+				nowMin=0;
+			}
+		}
+		return maxPos;
+
+	}
+};
