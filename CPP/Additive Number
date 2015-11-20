@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool canBeAdditive(string num,int a,int b){
+        if (num[a] == '0' && b-a>1 || a>12 || b-a>12)
+        {
+            return false;
+        }
+        long long num1 = stoll(num.substr(0,a)),num2 = stoll(num.substr(a,b-a));
+        while(b<num.size()){
+            long long sum = num1+num2;
+            string sumStr = to_string(sum);
+			if(num[b]=='0')return false;
+            if (num.substr(b,sumStr.size()) != sumStr)
+            {
+                return false;
+            }else{
+                a=b;
+                b+=sumStr.size();
+                num1 = num2;
+                num2 = sum;
+            }
+        }
+        return true;
+    }
+    bool isAdditiveNumber(string num) {
+		if(num.size()<3)return false;
+        for (int i = 1; i < num.size(); ++i)
+        {
+            for(int j=i+1;j<num.size();++j){
+                if (canBeAdditive(num,i,j))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
