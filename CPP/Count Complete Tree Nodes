@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if (!root)
+        {
+            return 0;
+        }
+        int count=0;
+        LevelCount(root,count);
+        return count;
+    }
+    void LevelCount(TreeNode* root,int &count){
+        if (!root)return;
+
+		//找到最左高度与最右高度
+		TreeNode*leftT = root,*rightT = root;
+		int heightL=0,heightR = 0;
+		while(leftT){
+			leftT = leftT->left;
+			heightL++;
+		}
+		while(rightT){
+			rightT = rightT->right;
+			heightR++;
+		}
+		if(heightL == heightR){
+			count += ((1<<heightL) - 1);
+			return;
+		}else{
+			count++;
+			LevelCount(root->left,count);
+			LevelCount(root->right,count);
+		}
+    }
+};
