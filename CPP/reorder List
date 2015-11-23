@@ -1,0 +1,32 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if(!head)return;
+        std::vector<ListNode*> v;
+        ListNode*t = head;
+        while(t){
+            v.push_back(t);
+            t= t->next;
+        }
+        int start = 1;
+        t=head;
+        while(start < v.size()){
+            t->next = v.back();
+			t= t->next;
+            v.pop_back();
+            if(start<v.size()){
+                t->next = v[start++];
+                t=t->next;
+			}
+        }
+		t->next = NULL;
+    }
+};
