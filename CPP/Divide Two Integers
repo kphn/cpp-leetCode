@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+		if(dividend==-2147483648 && divisor==-1)return 2147483647;
+		if(divisor==0)return 0x7fffffff;
+		if(divisor==1)return dividend;
+		int symbol=1;
+		if(dividend<0 && divisor>0 || dividend>0&&divisor<0){
+			symbol=-1;
+		}
+		long long dividendtemp = dividend;
+		long long divisortemp = divisor;
+		dividendtemp = abs(dividendtemp);
+		divisortemp = abs(divisortemp);
+		if(dividendtemp==0 || dividendtemp<divisortemp)return 0;
+        std::vector<long long> v(40,divisortemp);
+        for (int i = 1; i < 40; ++i)
+        {
+            v[i] = v[i-1]<<1;
+        }
+        int startPos=0;
+		long long res=0;
+        for (int i = 1; i < 100; ++i)
+        {
+            if (v[i]>dividendtemp)
+            {
+                startPos=i-1;
+                break;
+            }
+        }
+        for (int i = startPos; i >=0; --i)
+        {
+            res+=1<<i;
+            dividendtemp-=v[i];
+            for (int j = i-1; j >=0; --j)
+            {
+				i=j;
+                if (v[j]<=dividendtemp)
+                {
+					i=j+1;
+                    break;
+                }
+            }
+        }
+		return  symbol==1?res:-res;
+    }
+};
