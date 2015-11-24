@@ -1,0 +1,32 @@
+class Solution {
+public:
+	string helper(int thousandNum){
+		string v1[]={"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", 
+			"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", 
+			"Seventeen", "Eighteen", "Nineteen"};
+		string v2[]={"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+		string res;
+		int hundreds = thousandNum/100,tens = thousandNum%100,ones=thousandNum%10;
+		res = hundreds>0?v1[hundreds]+" Hundred ":"";
+		if (tens<20)
+		{
+			res += v1[tens];
+		}else{
+			res+=v2[tens/10]+" ";
+			res+=v1[tens%10];
+		}
+		if(res.back()==' ')res.pop_back();
+		return res;
+	}
+	string numberToWords(int num) {
+		string res;
+		string v[]={"","Thousand", "Million", "Billion"};
+		for (int i = 0; i < 4; ++i)
+		{
+			res =num%1000>0? helper(num%1000)+" "+v[i]+" "+res+" ":""+res;
+			num/=1000;
+		}
+		while(!res.empty() && res.back()==' ')res.pop_back();
+		return res.empty()?"Zero":res;
+	}
+};
