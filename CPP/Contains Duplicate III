@@ -1,0 +1,32 @@
+struct dataPlace
+{
+    int val,place;
+    dataPlace(int a,int b):val(a),place(b){}
+};
+class Solution {
+public:
+    static bool com(dataPlace d1,dataPlace d2){
+        return d1.val<d2.val;
+    }
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        if(nums.size()<2)return false;
+        std::vector<dataPlace> dp(nums.size(),dataPlace(-1,-1));
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            dp[i].val = nums[i];
+            dp[i].place = i;
+        }
+        sort(dp.begin(),dp.end(),com);
+        for (int i = 0; i < nums.size()-1; ++i)
+        {
+			for (int j = i+1;  j<nums.size() && (long long)dp[j].val-(long long)dp[i].val<=t ; ++j)
+            {
+                if (abs(dp[j].place - dp[i].place)<=k)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
