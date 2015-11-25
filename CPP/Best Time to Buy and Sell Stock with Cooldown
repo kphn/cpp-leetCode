@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if (prices.size()<2)
+        {
+            return 0;
+        }
+        if (prices.size()==2)
+        {
+            return max(0,prices[1]-prices[0]);
+        }
+        std::vector<int> sells(prices.size(),0),buys(prices.size(),0);
+        buys[0] = -prices[0];
+        buys[1] = max(-prices[1],-prices[0]);
+        sells[1] = max(0,prices[1]-prices[0]);
+        for (int i = 2; i < prices.size(); ++i)
+        {
+            buys[i] = max(sells[i-2]-prices[i],buys[i-1]);
+            sells[i] = max(prices[i]+buys[i-1] , sells[i-1]);
+        }
+        return sells.back();
+    }
+};
