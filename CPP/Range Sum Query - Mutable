@@ -1,0 +1,67 @@
+class NumArray {
+//using segment tree线段树
+private:
+	vector<int>segmentTree;
+	int malsize;
+public:
+    NumArray(vector<int> &nums) {
+        int length = nums.size(),l=0;
+        if (length&length-1 == 0)
+        {
+        	malsize = length<<1;
+        }else{
+        	while(length){
+	        	l++;
+	        	length>>=1;
+        	}
+        	malsize = 1<<(l+1);
+        }
+		segmentTree = vector<int>(malsize,0);
+        /*segmentTree = new int[malsize];
+        memset(segmentTree,0,malsize*sizeof(int));*/
+        for (int i = 0; i < nums.size(); ++i)
+        {
+        	segmentTree[(malsize>>1) + i] = nums[i];
+        }
+        for (int i = (malsize>>1)-1; i >0; --i)
+        {
+        	segmentTree[i] = segmentTree[i<<1]+segmentTree[(i<<1) + 1];
+        }
+        
+    }
+
+    void update(int i, int val) {
+    	int place = (malsize>>1)+i,add = val-segmentTree[place];
+        //segmentTree[place] = val;
+        while(place){
+        	segmentTree[place]+=add;
+        	place>>=1;
+        }
+
+    }
+
+    int sumRange(int i, int j) {
+        return query(i,j,1,0,(malsize>>1)-1);
+    }
+    int query(int i,int j,int k,int l,int r){
+    	if (r<i || j<l)
+    	{
+    		return 0;
+    	}
+    	if (i<=l && r<=j)
+    	{
+    		return segmentTree[k];
+    	}else{
+    		int v1 = query(i,j,k*2,l,(l+r)/2);
+    		int v2 = query(i,j,k*2+1,(l+r)/2+1,r);
+    		return v1+v2;
+    	}
+    }
+};
+
+
+// Your NumArray object will be instantiated and called as such:
+// NumArray numArray(nums);
+// numArray.sumRange(0, 1);
+// numArray.update(1, 10);
+// numArray.sumRange(1, 2);
