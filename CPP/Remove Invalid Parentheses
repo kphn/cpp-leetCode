@@ -1,0 +1,71 @@
+class Solution {
+public:
+	void dfs(string s,int a,int leftParenthese,int &maxLength,string temp,std::set<string> &res){
+		if ((temp.size() + s.size()-a) < maxLength)
+		{
+			return;
+		}
+		if (a == s.size())
+		{
+			if (leftParenthese == 0)
+			{
+				if (temp.size()>=maxLength)
+				{
+					maxLength = temp.size();
+					res.insert(temp);
+				}
+			}else{
+				auto end = temp.end()-1;
+				while(leftParenthese--){
+					while(*end != '('){
+						end--;
+					}
+					end = temp.erase(end);
+					if (leftParenthese)
+					{
+						end--;
+					}
+				}
+				if (temp.size()>=maxLength)
+				{
+					maxLength = temp.size();
+					res.insert(temp);
+				}
+			}
+			return;
+		}
+		if (s[a] == ')')
+		{
+			if (leftParenthese == 0)
+			{
+				dfs(s,a+1,leftParenthese,maxLength,temp,res);
+			}else{
+				temp.push_back(')');
+				dfs(s,a+1,leftParenthese-1,maxLength,temp,res);
+				temp.pop_back();
+				dfs(s,a+1,leftParenthese,maxLength,temp,res);
+			}
+		}else if (s[a] == '(')
+		{
+			temp.push_back('(');
+				dfs(s,a+1,leftParenthese+1,maxLength,temp,res);
+			temp.pop_back();
+			dfs(s,a+1,leftParenthese,maxLength,temp,res);
+		}else{
+			temp.push_back(s[a]);
+			dfs(s,a+1,leftParenthese,maxLength,temp,res);
+		}
+	}
+    vector<string> removeInvalidParentheses(string s) {
+        //将最少的不合理的括号去除掉，使其合法化
+        std::set<string> res;
+		vector<string>res1;
+        string temp;
+        int maxlength = 0;
+        dfs(s,0,0,maxlength,temp,res);
+		for(auto i = res.begin();i!=res.end();i++){
+			res1.push_back(*i);
+		}
+        return res1;
+    }
+};
