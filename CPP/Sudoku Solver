@@ -1,0 +1,41 @@
+class Solution {
+public:
+	void solveSudoku(vector<vector<char>>& board) {
+		helper(board,0);
+	}
+	bool helper(vector<vector<char>>& board,int step){
+		if (step == 81)
+		{
+			return true;
+		}
+		if (board[step/9][step%9] == '.')
+		{
+			for (int i = 0; i < 9; ++i)
+			{
+				board[step/9][step%9] = '1'+i;
+				if(isValid(board,step/9,step%9) && helper(board,step+1))
+					return true;
+				board[step/9][step%9] = '.';
+			}
+			
+			return false;
+		}else{
+			helper(board,step+1);
+		}
+	}
+	// 检查 (x, y) 是否合法
+	bool isValid(const vector<vector<char> > &board, int x, int y) {
+		int i, j;
+		for (i = 0; i < 9; i++) // 检查 y 列
+			if (i != x && board[i][y] == board[x][y])
+				return false;
+		for (j = 0; j < 9; j++) // 检查 x 行
+			if (j != y && board[x][j] == board[x][y])
+				return false;
+		for (i = 3 * (x / 3); i < 3 * (x / 3 + 1); i++)
+			for (j = 3 * (y / 3); j < 3 * (y / 3 + 1); j++)
+				if (i != x && j != y && board[i][j] == board[x][y])
+					return false;
+		return true;
+	}
+};
