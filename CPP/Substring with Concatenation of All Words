@@ -1,0 +1,50 @@
+class Solution {
+private:
+unordered_map<string,int> word_used,table;
+inline bool Areallwordsused(){
+    for (auto & i:word_used)
+        if (i.second!=0) return false;
+    return true;
+};
+public:
+vector<int> findSubstring(string s, vector<string>& words) {
+    vector<int> result;
+    if (words.empty()||s.empty()) return result;
+    if (words[0].empty()) return result;
+    for (auto & word:words)
+        table[word]++;
+    word_used=table;
+    int len=words[0].size(),n=words.size(),l=s.size();
+    for (int i=0;i<len;i++) {
+        int start=i,j=start;
+        while (start<=l-len*n) {
+            unordered_map<string,int>::iterator it=word_used.find(s.substr(j,len));
+            if (it!=word_used.end()) {
+                if (it->second>0) {
+                    it->second--;
+                    j+=len;
+                    continue;
+                }
+                else {
+                    if (Areallwordsused()) result.push_back(start);
+                    word_used[s.substr(start,len)]++;
+                    start+=len;
+                }
+            }
+            else {
+                if (j==start) {
+                    start+=len;
+                    j=start;
+                    continue;
+                }
+                if (Areallwordsused()) result.push_back(start);
+                word_used=table;
+                j+=len;
+                start=j;
+            }
+        }
+        word_used=table;
+    }
+    return result;
+    }
+};
