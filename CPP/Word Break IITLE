@@ -1,0 +1,33 @@
+class Solution {
+public:
+    void helper(string s,string temp,unordered_set<string>&wordDict,int now,int minLength,int maxLength,std::vector<string>&res){
+        if (now == s.size())
+        {
+            if (!s.empty())
+            {
+                res.push_back(temp.substr(1,temp.size()-1));
+            }
+            return;
+        }
+        for (int i = minLength; i <= maxLength; ++i)
+        {
+			if (i+now<= s.size() && wordDict.find(s.substr(now,i)) != wordDict.end())
+            {
+                string str = temp+" "+s.substr(now,i);
+                helper(s,str,wordDict,now+i,minLength,maxLength,res);
+            }
+        }
+    }
+    vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
+        int minLength=0xffff,maxLength=0;
+        for (string str:wordDict)
+        {
+            minLength = min(minLength,(int)str.size());
+            maxLength = max(maxLength,(int)str.size());
+        }
+        string temp;
+        std::vector<string> res;
+        helper(s,temp,wordDict,0,minLength,maxLength,res);
+        return res;
+    }
+};
