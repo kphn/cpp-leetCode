@@ -1,0 +1,46 @@
+class Solution
+{
+private:
+    struct group
+    {
+        int val;
+        int factor;
+        int index;
+        group(int v, int f, int i):val(v), factor(f), index(i){}
+    };
+    class myGreater
+    {
+    public:
+        bool operator()(group &g1, group &g2)
+        {
+            return g1.val > g2.val;
+        }
+    };
+public:
+    int nthSuperUglyNumber(int n, vector<int>& primes)
+    {
+        vector<int> ugly(n);
+        ugly[0] = 1;
+        priority_queue<group, vector<group>, myGreater> pq;
+
+        for (auto &p : primes)
+            pq.push({p, p , 0});
+
+        int cnt = 1;
+        while (cnt < n)
+        {
+            auto tmp = pq.top();
+            //To avoid duplicates
+            while (tmp.val == ugly[cnt - 1])
+            {
+                pq.push({tmp.factor * ugly[tmp.index + 1], tmp.factor, tmp.index + 1});
+                pq.pop();
+                tmp = pq.top();
+            }
+            ugly[cnt++] = tmp.val;
+            pq.push({tmp.factor * ugly[tmp.index + 1], tmp.factor, tmp.index + 1});
+            pq.pop();
+        }
+        return ugly.back();
+    }
+};
