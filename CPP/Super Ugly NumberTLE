@@ -1,0 +1,31 @@
+struct cmp1
+{
+	bool operator ()(int x, int y)
+	{
+		return x > y;//小的优先级高
+	}
+};
+class Solution {
+public:
+	int nthSuperUglyNumber(int n, vector<int>& primes) {
+		priority_queue<int,vector<int>,cmp1>minQ;
+		set<int>myset;
+		minQ.push(1);
+		myset.insert(1);
+		int min=1;
+		for (int i = 0; i < n; ++i)
+		{
+			min = minQ.top();
+			minQ.pop();
+			for (int j = 0; j < primes.size(); ++j)
+			{
+				if(myset.find(min*primes[j]) == myset.end())
+				{
+					myset.insert(min*primes[j]);
+					minQ.push(min*primes[j]);
+				}
+			}
+		}
+		return min;
+	}
+};
