@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& height) {
+      //只对封顶进行往前遍历
+      if (height.empty())
+      {
+        return 0;
+      }
+      int res=height[0];
+      height.push_back(0);
+      for (int i = 1; i < height.size()-1; ++i)
+      {
+        if (height[i]>height[i+1])
+        {
+          int minHeight = height[i];
+          res = max(res,height[i]);
+          for (int j = i-1; j>=0; --j)
+          {
+            minHeight = min(minHeight,height[j]);
+            res = max(res,minHeight*(i-j+1));
+          }
+        }
+      }
+      return res;
+    }
+};
