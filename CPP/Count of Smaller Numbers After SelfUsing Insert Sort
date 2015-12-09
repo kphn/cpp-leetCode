@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        int size = nums.size();
+        std::vector<int> res,temp;
+        for (int i = size-1; i >= 0; --i)
+        {
+            res.push_back(insert(temp,nums[i]));
+        }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+    int insert(std::vector<int> &temp,int num){
+        int size = temp.size();
+        int res = distance(temp.begin(),lower_bound(temp.begin(),temp.end(),num));
+        temp.insert(temp.begin()+res,num);
+        return res;
+    }
+};
