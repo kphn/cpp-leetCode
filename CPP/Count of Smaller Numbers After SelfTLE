@@ -1,0 +1,73 @@
+class SegmentTree {
+struct dataNum
+{
+    int data;
+    int num;
+    dataNum(int a,int b):data(a),num(b){}
+};
+//using segment tree线段树
+private:
+    vector<dataNum>segmentTree;
+    int malsize;
+public:
+    SegmentTree(vector<int> &nums) {
+        int length = nums.size(),l=0;
+        if ((length & length-1) == 0)
+        {
+            malsize = length<<1;
+        }else{
+            while(length){
+                l++;
+                length>>=1;
+            }
+            malsize = 1<<(l+1);
+        }
+        segmentTree = vector<dataNum>(malsize,dataNum(0,0));
+        /*segmentTree = new int[malsize];
+        memset(segmentTree,0,malsize*sizeof(int));*/
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            segmentTree[(malsize>>1) + i] = dataNum(nums[i],1);
+        }
+        for (int i = (malsize>>1)-1; i >0; --i)
+        {
+            segmentTree[i] = dataNum(max(segmentTree[i<<1].data,segmentTree[(i<<1) + 1].data) ,segmentTree[i<<1].num + segmentTree[(i<<1)+1].num);
+        }
+        
+    }
+    int smallAfterI(int i,int num){
+        return helper(i,(malsize>>1)-1,num,1,0,(malsize>>1)-1);
+    }
+    int helper(int i,int j,int num,int k,int l,int r){
+        int res=0;
+        if (r<i || j<l)
+        {
+            return 0;
+        }
+        if (i<=l && r<=j)
+        {
+            if (num>segmentTree[k].data)
+            {
+                res = segmentTree[k].num;
+			}else if (l==r){
+				return 0;
+			}else{
+                res = helper(i,j,num,k*2,l,(l+r)/2) + helper(i,j,num,k*2+1,(l+r)/2+1,r);
+            }
+
+            return res;
+        }else{
+            return helper(i,j,num,k*2,l,(l+r)/2) + helper(i,j,num,k*2+1,(l+r)/2+1,r);
+        }
+    }
+};
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        SegmentTree s(nums);
+        vector<int>res;
+        for(int i=0;i<nums.size();i++)
+        res.push_back(s.smallAfterI(i,nums[i]));
+        return res;
+    }
+};
