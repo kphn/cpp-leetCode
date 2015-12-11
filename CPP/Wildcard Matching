@@ -1,0 +1,71 @@
+class Solution {
+public:
+	bool isMatch(string s, string p) {
+		if (s.size()!=p.size() && p.find('*')>p.size())return false;
+		if (s.empty())
+		{
+			if(p.empty())return true;
+			else{
+				for(auto i=0;i<p.size();i++){
+					if(p[i]!='*')return false;
+				}
+				return true;
+			}
+		}
+		vector<vector<bool>> dp(s.size()+1,vector<bool>(p.size(),false));//多加一行，为了处理*匹配成空的情况
+		for(int i=0;i<p.size();i++){
+		    if(p[i] == '*')dp[0][i] = true;
+		    else break;
+		}
+
+		if (p[0] == s[0])
+		{
+			dp[1][0]=true;
+		}else if (p[0]=='?')
+		{
+			dp[1][0]=true;
+		}else if (p[0]=='*')
+		{
+			for (int i = 0; i < s.size(); ++i)
+			{
+				dp[i+1][0] = true;
+			}
+		}
+
+		for (int i = 1; i < p.size(); i++)
+		{
+			switch (p[i])
+			{
+			case '?':
+				for (int j = 1; j <s.size()+1; j++)
+				{
+					dp[j][i] = dp[j-1][i-1];
+				}
+				break;
+			case '*':
+				for (int j = 1; j < s.size()+1; j++)
+				{
+					if (dp[j][i-1])
+					{
+						for (int k = j; k < s.size()+1; k++)
+						{
+							dp[k][i] = true;
+						}
+						break;
+					}
+				}
+				break;
+			default:
+				for (int j = 1; j < s.size()+1; j++)
+				{
+					if (s[j-1] == p[i])
+					{
+						dp[j][i] = dp[j-1][i-1];
+					}
+				}
+				break;
+			}
+		}
+		return dp.back().back();
+	}
+};
