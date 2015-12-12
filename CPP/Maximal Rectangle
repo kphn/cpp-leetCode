@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& height) {
+      //只对封顶进行往前遍历
+      if (height.empty())
+      {
+        return 0;
+      }
+      int res=height[0];
+      height.push_back(0);
+      for (int i = 1; i < height.size()-1; ++i)
+      {
+        if (height[i]>height[i+1])
+        {
+          int minHeight = height[i];
+          res = max(res,height[i]);
+          for (int j = i-1; j>=0; --j)
+          {
+            minHeight = min(minHeight,height[j]);
+            res = max(res,minHeight*(i-j+1));
+          }
+        }
+      }
+      return res;
+    }
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        //使用Largest Rectangle in Histogram的思路，将矩阵看成直方图
+        if (matrix.empty())
+        {
+            return 0;
+        }
+        std::vector<std::vector<int>> heightVec(matrix.size(),vector<int>(matrix[0].size(),0));
+        for (int i = 0; i < matrix[0].size(); ++i)
+        {
+            int height = 0;
+            for (int j = matrix.size()-1; j >=0; --j)
+            {
+                if (matrix[j][i] == '0')
+                {
+                    height = 0;
+                }else{
+                    heightVec[j][i] = ++height;
+                }
+            }
+        }
+        int res=0;
+        for (int i = 0; i < heightVec.size(); ++i)
+        {
+            res = max(res,largestRectangleArea(heightVec[i]));
+        }
+        return res;
+    }
+};
