@@ -1,0 +1,42 @@
+class Solution {
+public:
+    //get the kth number of two sorted array
+    double findkth(vector<int>::iterator a,int m,
+                vector<int>::iterator b,int n,
+                int k)
+    {
+        if(m >  n)
+            return findkth(b,n,a,m,k);
+        if(m == 0)
+            return b[k-1];
+        if(k == 1)
+            return min(*a,*b);
+
+        int pa = min(k/2,m),pb = k - pa;
+        if(*(a + pa - 1) < *(b + pb -1))
+            return findkth(a+pa,m-pa,b,n,k-pa);
+        else if(*(a + pa -1) > *(b + pb -1))
+            return findkth(a,m,b+pb,n-pb,k-pb);
+        else
+            return *(a+pa-1);
+    }
+
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        vector<int>::iterator a = nums1.begin();
+        vector<int>::iterator b = nums2.begin();
+        int total = nums1.size() + nums2.size();
+
+        // judge the total num of two arrays is odd or even
+        if(total & 0x1)
+            return findkth(a,nums1.size(),
+                           b,nums2.size(),
+                           total/2+1);
+        else
+            return (findkth(a,nums1.size(),
+                           b,nums2.size(),
+                           total/2) +
+                    findkth(a,nums1.size(),
+                            b,nums2.size(),
+                            total/2 + 1))/2;
+    }
+};
