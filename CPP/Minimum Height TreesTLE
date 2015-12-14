@@ -1,0 +1,47 @@
+class Solution {
+public:
+    void bfs(vector<vector<int>> &graph,int i,int &depth){
+        set<int>hasVisited;
+        std::vector<int> nowVisit,temp;
+        hasVisited.insert(i);
+        nowVisit.push_back(i);
+        while(!nowVisit.empty()){
+            depth++;
+            temp.clear();
+            for(auto i:nowVisit){
+                for(auto j:graph[i]){
+                    if (hasVisited.find(j) == hasVisited.end())
+                    {
+                        hasVisited.insert(j);
+                        temp.push_back(j);
+                    }
+                }
+            }
+            nowVisit = temp;
+        }
+    }
+    vector<int> findMinHeightTrees(int n, vector<pair<int, int>>& edges) {
+        vector<vector<int>> graph(n,vector<int>);
+        std::vector<int>depths(n,0);
+        for(auto edge:edges){
+            graph[edge.first].push_back(edge.second);
+        }
+        int mindep=0xffff;
+        for (int i = 0; i < n; ++i)
+        {
+            int depth=0;
+            bfs(graph,depth);
+            mindep = min(mindep,depth);
+            depths[i] = depth;
+        }
+        std::vector<int> res;
+        for (int i = 0; i < depths.size(); ++i)
+        {
+            if (depths[i] == mindep)
+            {
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+};
