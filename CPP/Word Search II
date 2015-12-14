@@ -1,0 +1,102 @@
+class TrieNode {
+public:
+    // Initialize your data structure here.
+    TrieNode() {
+        for(int i = 0; i < 26; ++i)
+            next[i] = NULL;
+        end = false;
+    }
+    void insert(string s){
+        if(s.empty()){
+            end = true;
+            return;
+        }
+        if(next[s[0] - 'a'] == NULL)
+            next[s[0] - 'a'] = new TrieNode();
+        next[s[0] - 'a']->insert(s.substr(1));
+    }
+    bool search(string key){
+        if(key.empty())
+            return end;
+        if(next[key[0] - 'a'] == NULL)
+            return false;
+        return next[key[0] - 'a']->search(key.substr(1));
+    }
+    bool startsWith(string prefix){
+        if(prefix.empty())
+            return true;
+        if(next[prefix[0] - 'a'] == NULL)
+            return false;
+        return next[prefix[0] - 'a']->startsWith(prefix.substr(1));
+    }
+private:
+    TrieNode *next[26];
+    bool end;
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string s) {
+        root->insert(s);
+    }
+
+    // Returns if the word is in the trie.
+    bool search(string key) {
+        return root->search(key);
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    bool startsWith(string prefix) {
+        return root->startsWith(prefix);
+    }
+
+private:
+    TrieNode* root;
+};
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        const int row = board.size();
+        const int column = board[0].size();
+        vector<string> result;
+        for(auto word : words)
+            trie.insert(word);
+        for(int i = 0; i < row; ++i)
+            for(int j = 0; j < column; ++j){
+                vector<vector<bool> > visited(row, vector<bool>(column, false));
+                dfs(board, "", i, j, visited, result);
+            }
+        sort(result.begin(), result.end());
+        result.erase(unique(result.begin(), result.end()), result.end());
+        return result;
+    }
+private:
+    Trie trie;
+    void dfs(vector<vector<char> > &board, string word, int x, int y, vector<vector<bool> > &visited, vector<string>& result){
+        if(x < 0 || x > board.size() - 1)
+            return;
+        if(y < 0 || y > board[0].size() - 1)
+            return;
+        if(visited[x][y])
+            return;
+        word.push_back(board[x][y]);
+        if(trie.search(word))
+            result.push_back(word);
+        if(trie.startsWith(word))
+        {
+            visited[x][y] = true;
+            dfs(board, word, x - 1, y, visited, result);
+            dfs(board, word, x, y - 1, visited, result);
+            dfs(board, word, x + 1, y, visited, result);
+            dfs(board, word, x, y + 1, visited, result);
+            visited[x][y] = false;
+        }
+        word.pop_back();
+    }
+};
