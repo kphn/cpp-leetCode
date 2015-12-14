@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<pair<int, int>>& edges) {
+        if(n==1)return vector<int>(1,0);
+        vector<set<int>> graph(n,set<int>());
+        std::vector<int> connects(n,0);
+        for(auto edge:edges){
+            graph[edge.first].insert(edge.second);
+            graph[edge.second].insert(edge.first);
+        }
+        std::vector<int> leafs,notleaf;
+        //int noleaf=0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (graph[i].size()==1)leafs.push_back(i);
+			if (graph[i].size()>1)notleaf.push_back(i);
+            connects[i] = graph[i].size();
+        }
+		while(!notleaf.empty()){
+            //还存在非叶节点，继续
+            for(auto i:leafs){
+                int con = *(graph[i].begin());
+                connects[con]--;
+                connects[i]=0;
+                for (auto j = graph[con].begin(); j != graph[con].end(); ++j)
+                {
+                    if (*j == i)
+                    {
+                        graph[con].erase(j);
+						break;
+                    }
+                }
+            }
+            leafs.clear();
+			vector<int>temp;
+			for (auto l:notleaf)
+            {
+                if (connects[l] <2)
+                {
+                    leafs.push_back(l);
+				}else{
+					temp.push_back(l);
+				}
+            }
+			notleaf = temp;
+        }
+        return leafs;
+    }
+};
