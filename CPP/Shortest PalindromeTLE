@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool isSubPalin(string &s,int endPos){
+        for (int i = 0; i <= endPos/2; ++i)
+        {
+            if (s[i] != s[endPos-i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    string shortestPalindrome(string s) {
+        if(isSubPalin(s,s.size()-1))return s;
+        int endPos = s.size()-1,i;
+        for (i = endPos; i >=0; --i)
+        {
+            if (isSubPalin(s,i))break;
+        }
+        string t = s.substr(i+1,s.size()-i-1);
+        reverse(t.begin(),t.end());
+        return t+s;
+    }
+};
