@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        map<char,int>myMap;
+        for(auto c:s){
+            myMap[c]++;
+        }
+        stack<char>myStack;
+        set<char>resultSet;
+        for(auto c:s){
+            myMap[c]--;
+            if (resultSet.find(c) != resultSet.end())continue;
+            while(!myStack.empty() && myStack.top()>c && myMap[myStack.top()])
+            {
+                for (auto i = resultSet.begin();i!=resultSet.end();i++)
+                {
+                    if (*i == myStack.top())
+                    {
+                        resultSet.erase(i);
+                        break;
+                    }
+                }
+				myStack.pop();
+            }
+            resultSet.insert(c);
+            myStack.push(c);
+        }
+        string res;
+        while(!myStack.empty()){
+            res+=myStack.top();
+            myStack.pop();
+        }
+		reverse(res.begin(),res.end());
+        return res;
+    }
+};
