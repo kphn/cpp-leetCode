@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string shortestPalindrome(string s) {
+        //S+‘#’+reverse(S),求出最后一个字母的最常相同前缀后缀，即是以开头字母最长的回文字符串段
+        if (s.size() == 0)return "";
+        string tmp (s);
+        reverse(tmp.begin(),tmp.end());
+        string kmp = s + '#' + tmp;
+        std::vector<int> next(kmp.size(),0);
+		next[0] = -1;
+
+		int k=-1,j=0;
+		while(j<kmp.size()-1){
+			if(k == -1 || kmp[k] == kmp[j]){
+				++j;
+				++k;
+				next[j] = k;
+			}else{
+				k = next[k];
+			}
+		}
+
+		int subPalinLength = next.back() + (s[0]==s[next.back()]?1:0);
+
+        string t = s.substr(subPalinLength,s.size()-subPalinLength);
+        reverse(t.begin(),t.end());
+        return t+s;
+    }
+};
