@@ -1,0 +1,52 @@
+class Solution {
+public:
+	bool containsAllChar(int *s,int *t){
+		for (int i = 0; i < 256; ++i){
+			if (s[i] < t[i])return false;
+		}
+		return true;
+	}
+	string minWindow(string s, string t) {
+		string res = "";
+		int myMaps[256] = {}, myMapt[256] = {};
+		set<char>st;
+		for (auto e : t)
+		{
+			st.insert(e);
+			myMapt[e]++;
+			myMaps[e] = 0;
+		}
+		int start = 0, end = 0;      //维持窗口大小的两个指针
+		while (end<s.size()){
+			while (!containsAllChar(myMaps, myMapt) && end<s.size()){
+				if (st.find(s[end]) == st.end()){ ++end; continue; }
+				else{
+					myMaps[s[end++]]++;
+				}
+			}
+			
+			if(containsAllChar(myMaps,myMapt)) {
+				//containsAllChar
+				while (containsAllChar(myMaps, myMapt)){
+					if (st.find(s[start]) == st.end()){ ++start; continue; }
+					else{
+						if (myMapt[s[start]] == myMaps[s[start]])
+						{
+							if (res.empty())res =  s.substr(start, end - start);
+							else{
+								res = res.size() < (end - start) ? res : s.substr(start, end - start);
+							}	
+							myMaps[s[start++]]--;
+							break;
+						}
+						else{
+							myMaps[s[start]]--;
+							++start;
+						}
+					}
+				}
+			}
+		}
+		return res;
+	}
+};
