@@ -1,0 +1,89 @@
+//使用双向链表及map（可在O(1)时间内查询到cache）来实现
+struct node
+{
+	int key;
+	int value;
+	node*next, *prev;
+	node() :key(0), value(0), next(NULL), prev(NULL){};
+};
+class LRUCache{
+private:
+	std::map<int, node*> myMap;
+	node*nodes, *head, *end, *empty;
+public:
+	LRUCache(int capacity) {
+		nodes = new node[capacity + 2];
+		for (int i = 1; i <= capacity; ++i)
+		{
+			(nodes+i)->prev = nodes+i - 1;
+			(nodes+i)->next = nodes+i + 1;
+		}
+		nodes->next = nodes+1;
+		(nodes+capacity + 1)->prev = nodes+capacity;
+		empty = nodes+1;
+		head = nodes;
+		end = nodes+capacity + 1;
+	}
+
+	int get(int key) {
+		if (myMap.find(key) == myMap.end())return -1;
+		int res = myMap[key]->value;
+		node*temp = myMap[key];
+		temp->prev->next = temp->next;
+		temp->next->prev = temp->prev;
+		head->next->prev = temp;
+		temp->next = head->next;
+		head->next = temp;
+		temp->prev = head;
+
+		return res;
+	}
+
+	void set(int key, int value) {
+		if (myMap.find(key) == myMap.end())
+		{
+			if (empty != end)
+			{
+				empty->key = key;
+				empty->value = value;
+				myMap[key] = empty++;
+				node*temp = (empty - 1);
+				temp->prev->next = temp->next;
+				temp->next->prev = temp->prev;
+				head->next->prev = temp;
+				temp->next = head->next;
+				head->next = temp;
+				temp->prev = head;
+			}
+			else{
+				int lastKey = end->prev->key;
+				end->prev->key = key;
+				end->prev->value = value;
+				for (auto i = myMap.begin(); i != myMap.end(); ++i){
+					if (i->first == lastKey){
+						myMap.erase(i);
+						break;
+					}
+				}
+				myMap[key] = end->prev;
+				node*temp = end->prev;
+				temp->prev->next = end;
+				end->prev = temp->prev;
+				temp->next = head->next;
+				head->next->prev = temp;
+				head->next = temp;
+				temp->prev = head;
+			}
+		}
+		else{
+			myMap[key]->value = value;
+			node*temp = myMap[key];
+			temp->prev->next = temp->next;
+			temp->next->prev = temp->prev;
+			head->next->prev = temp;
+			temp->next = head->next;
+			head->next = temp;
+			temp->prev = head;
+		}
+	}
+};
