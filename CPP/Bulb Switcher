@@ -1,0 +1,7 @@
+class Solution {
+public:
+    int bulbSwitch(int n) {
+        //每一个K^2会进行两次开关，还是开的，1,4,9,16...
+        return sqrt(n);
+    }
+};
