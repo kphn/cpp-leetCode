@@ -8,6 +8,7 @@ public:
 		for (int i = 0; i < length - 2; i++)
 		{
 			for (int j = i + 3; j < length; j++){
+			//两层循环加上2sum ，时间复杂度O(n^3)
 				int start = i + 1;
 				int end = j - 1;
 				int TwoSum = nums[i] + nums[j];
