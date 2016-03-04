@@ -1,3 +1,4 @@
+//可以进行无数次股票交易，贪心算法，哪天涨哪天就进行交易
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
