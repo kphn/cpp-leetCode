@@ -1,3 +1,4 @@
+//从前往后遍历，只需要记录当前为止的最小值，并用当前值减去迄今为止的最小值即可
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
