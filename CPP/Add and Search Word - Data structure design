@@ -1,3 +1,4 @@
+//trie的构造，其中的节点映射采用的是map
 class TrieNode {
 public:
     char ch;
