@@ -1,5 +1,6 @@
 class Solution {
 public:
+    //找出最大的盛水量，因为盛水量取决于短板，这样每次将两边最短的板子往中间再寻找即可。（长板往中间移动无效，盛水量还是取决于短板）
     int maxArea(vector<int>& height) {
         int l=0,r= height.size()-1,maxContain =0;
         while(l<r){
