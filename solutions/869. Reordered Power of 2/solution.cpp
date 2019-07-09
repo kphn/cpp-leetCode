@@ -31,16 +31,9 @@ public:
 int main()
 {
     Solution s;
-    // cout << s.reorderedPowerOf2(46) << endl;
-    // cout << s.reorderedPowerOf2(10) << endl;
-    if (s.reorderedPowerOf2(1))
-    {
-        cout << "aaaa" << endl;
-    }
-    else
-    {
-        cout << "bbbbbb" << endl;
-    }
+    cout << s.reorderedPowerOf2(1) << endl;
+    cout << s.reorderedPowerOf2(10) << endl;
+    cout << s.reorderedPowerOf2(46) << endl;
 
     return 0;
 }
